@@ -4,16 +4,16 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.List;
 import java.util.ArrayList;
 
-public class Manager {
-    private static Manager instance;
+public class ToggleManager {
+    private static ToggleManager instance;
     private final List<Toggle> notifications = new CopyOnWriteArrayList<>();
     private final int maxNotifications = 5;
     
-    private Manager() {}
+    private ToggleManager() {}
     
-    public static Manager getInstance() {
+    public static ToggleManager getInstance() {
         if (instance == null) {
-            instance = new Manager();
+            instance = new ToggleManager();
         }
         return instance;
     }

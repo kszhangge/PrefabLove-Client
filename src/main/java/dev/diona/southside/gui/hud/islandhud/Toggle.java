@@ -26,10 +26,6 @@ public class Toggle {
         return slidingOut;
     }
     
-    public long getSlideOutStartTime() {
-        return slideOutStartTime;
-    }
-    
     public String getModuleName() {
         return moduleName;
     }

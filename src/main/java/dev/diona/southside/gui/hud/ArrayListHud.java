@@ -31,11 +31,12 @@ import java.util.concurrent.atomic.AtomicReference;
 import static dev.diona.southside.PrefabLove.MC.mc;
 
 public class ArrayListHud extends Hud {
-    public final Switch shadow = new Switch("Shadow", true);
+    public final Switch glow = new Switch("Glow", true);
     public final Slider blurStrength = new Slider("Blur Strength", 5, 0, 30, 1);
     public final Slider radius = new Slider("Radius", 3, 0, 10, 0.5);
     public final Switch noRender = new Switch("No Render Modules", true);
     public final Switch background = new Switch("Background", true);
+    public final Slider bgAlpha = new Slider("Background Alpha", 100, 0, 255, 1);
     public final Dropdown colorValue = new Dropdown("Color", new String[]{
             "Custom",
             "Rainbow",
@@ -93,10 +94,6 @@ public class ArrayListHud extends Hud {
             }
         }
         NanoVGHelper nanoVGHelper = NanoVGHelper.INSTANCE;
-//        int reverse = switch (position.getValue().anchor) {
-//            case BOTTOM_LEFT, BOTTOM_CENTER, BOTTOM_RIGHT -> -1;
-//            default -> 1;
-//        };
         nanoVGHelper.setupAndDraw(true, vg -> {
             enabledModules.sort((o1, o2) -> (int) (10000F * nanoVGHelper.getTextWidth(vg, PrefabLove.moduleManager.formatRaw(o2.module), fontSize, Fonts.WQY) - 10000F * nanoVGHelper.getTextWidth(vg, PrefabLove.moduleManager.formatRaw(o1.module), fontSize, Fonts.WQY)));
         });
@@ -114,9 +111,36 @@ public class ArrayListHud extends Hud {
         AtomicBoolean updatedSize = new AtomicBoolean(false);
         AtomicReference<Float> thisHeight = new AtomicReference<>(0f);
         AtomicReference<Float> thisWidth = new AtomicReference<>(0f);
+
+        java.util.List<float[]> blurRects = new java.util.ArrayList<>();
+
         nanoVGHelper.setupAndDraw(true, vg -> {
             float fontSize = 20 * 0.3F * scale;
+            float moduleY = 0;
+            int reverse = switch (position.getValue().anchor) {
+                case BOTTOM_LEFT, BOTTOM_CENTER, BOTTOM_RIGHT -> -1;
+                default -> 1;
+            };
 
+            for (ArrayListModule module : enabledModules) {
+                module.y.update(reverse * moduleY);
+                module.y.freeze();
+                module.x.update(0);
+
+                ModuleDrawResult result = module.drawAndGetRect(vg, x, y, background.getValue(), scale, true);
+                if (result != null && background.getValue()) {
+                    blurRects.add(new float[]{result.bgX, result.bgY, result.bgWidth, result.bgHeight});
+                }
+
+                moduleY += nanoVGHelper.getTextHeight(vg, fontSize, Fonts.WQY) + 10 * 0.3F * scale;
+            }
+        });
+        if (background.getValue() && blurStrength.getValue().floatValue() > 0 && !blurRects.isEmpty()) {
+            drawUnifiedBlurFromRects(blurRects, blurStrength.getValue().floatValue());
+        }
+
+        nanoVGHelper.setupAndDraw(true, vg -> {
+            float fontSize = 20 * 0.3F * scale;
             float moduleY = 0;
             int reverse = switch (position.getValue().anchor) {
                 case BOTTOM_LEFT, BOTTOM_CENTER, BOTTOM_RIGHT -> -1;
@@ -130,15 +154,12 @@ public class ArrayListHud extends Hud {
                 case TOP_LEFT, MIDDLE_LEFT, BOTTOM_LEFT -> scissorHelper.scissor(vg, x, 0, UResolution.getScaledWidth(), UResolution.getScaledHeight());
                 default -> scissorHelper.scissor(vg, 0, 0, x + this.getWidth(scale, example), UResolution.getScaledHeight());
             };
+
             for (ArrayListModule module : enabledModules) {
-//                final var font = PrefabLove.fontManager.roboto;
-                module.y.update(reverse * moduleY);
-                module.y.freeze();
-                module.x.update(0);
-                float width = module.draw(vg, x, y, background.getValue(), scale);
+                ModuleDrawResult result = module.drawAndGetRect(vg, x, y, background.getValue(), scale, false);
                 moduleY += nanoVGHelper.getTextHeight(vg, fontSize, Fonts.WQY) + 10 * 0.3F * scale;
                 updatedSize.set(true);
-                thisWidth.set(Math.max(thisWidth.get(), width));
+                thisWidth.set(Math.max(thisWidth.get(), result != null ? result.width : 0));
             }
 
             thisHeight.set(moduleY);
@@ -147,7 +168,44 @@ public class ArrayListHud extends Hud {
                 if (shouldDisplay(module.module)) continue;
                 module.y.update(0);
                 module.x.update(scale * reverseX * 110 * 0.3F);
-                module.draw(vg, x, y, background.getValue(), scale);
+                module.drawAndGetRect(vg, x, y, background.getValue(), scale, false);
+            }
+            scissorHelper.resetScissor(vg, scissor);
+        });
+
+        if (glow.getValue() && !blurRects.isEmpty()) {
+            drawUnifiedBlurFromRects(blurRects, 2f);
+        }
+        nanoVGHelper.setupAndDraw(true, vg -> {
+            float fontSize = 20 * 0.3F * scale;
+            float moduleY = 0;
+            int reverse = switch (position.getValue().anchor) {
+                case BOTTOM_LEFT, BOTTOM_CENTER, BOTTOM_RIGHT -> -1;
+                default -> 1;
+            };
+            int reverseX = switch (position.getValue().anchor) {
+                case TOP_LEFT, MIDDLE_LEFT, BOTTOM_LEFT -> -1;
+                default -> 1;
+            };
+            Scissor scissor = switch (position.getValue().anchor) {
+                case TOP_LEFT, MIDDLE_LEFT, BOTTOM_LEFT -> scissorHelper.scissor(vg, x, 0, UResolution.getScaledWidth(), UResolution.getScaledHeight());
+                default -> scissorHelper.scissor(vg, 0, 0, x + this.getWidth(scale, example), UResolution.getScaledHeight());
+            };
+
+            for (ArrayListModule module : enabledModules) {
+                ModuleDrawResult result = module.drawAndGetRect(vg, x, y, background.getValue(), scale, false);
+                moduleY += nanoVGHelper.getTextHeight(vg, fontSize, Fonts.WQY) + 10 * 0.3F * scale;
+                updatedSize.set(true);
+                thisWidth.set(Math.max(thisWidth.get(), result != null ? result.width : 0));
+            }
+
+            thisHeight.set(moduleY);
+
+            for (ArrayListModule module : modules.values()) {
+                if (shouldDisplay(module.module)) continue;
+                module.y.update(0);
+                module.x.update(scale * reverseX * 110 * 0.3F);
+                module.drawAndGetRect(vg, x, y, background.getValue(), scale, false);
             }
             scissorHelper.resetScissor(vg, scissor);
         });
@@ -204,6 +262,40 @@ public class ArrayListHud extends Hud {
         return rainbow.getColorRGB(offset);
     }
 
+    private void drawUnifiedBlurFromRects(java.util.List<float[]> rects, float customBlurStrength) {
+        float blurStrengthValue = customBlurStrength;
+        float radiusValue = radius.getValue().floatValue();
+
+        stencilFramebuffer = RenderUtil.createFrameBuffer(stencilFramebuffer);
+        stencilFramebuffer.framebufferClear();
+        stencilFramebuffer.bindFramebuffer(false);
+
+        for (float[] rect : rects) {
+            RoundUtil.drawRound(rect[0], rect[1], rect[2], rect[3], radiusValue, Color.WHITE);
+        }
+
+        stencilFramebuffer.unbindFramebuffer();
+
+        int iterations = Math.max(1, (int)(blurStrengthValue / 10));
+        int offset = (int)blurStrengthValue;
+        KawaseBlur.renderBlur(stencilFramebuffer.framebufferTexture, iterations, offset);
+
+        mc.getFramebuffer().bindFramebuffer(true);
+    }
+
+    private static class ModuleDrawResult {
+        float width;
+        float bgX, bgY, bgWidth, bgHeight;
+
+        ModuleDrawResult(float width, float bgX, float bgY, float bgWidth, float bgHeight) {
+            this.width = width;
+            this.bgX = bgX;
+            this.bgY = bgY;
+            this.bgWidth = bgWidth;
+            this.bgHeight = bgHeight;
+        }
+    }
+
     public static class ArrayListModule {
         public ArrayListHud parent;
         public Module module;
@@ -214,14 +306,14 @@ public class ArrayListHud extends Hud {
             this.module = module;
         }
 
-        public float draw(long vg, float targetX, float targetY, boolean background, float scale) {
+        public ModuleDrawResult drawAndGetRect(long vg, float targetX, float targetY, boolean background, float scale, boolean skipDraw) {
             float fontSize = 20 * 0.3F * scale;
             int reverseX =  switch (parent.position.getValue().anchor) {
                 case TOP_LEFT, MIDDLE_LEFT, BOTTOM_LEFT -> -1;
                 default -> 1;
             };
-            if (reverseX == 1 && (x.get() >= 100 * 0.3F * scale)) return 0f;
-            if (reverseX == -1 && (x.get() <= -100 * 0.3F * scale)) return 0f;
+            if (reverseX == 1 && (x.get() >= 100 * 0.3F * scale)) return null;
+            if (reverseX == -1 && (x.get() <= -100 * 0.3F * scale)) return null;
             NanoVGHelper nanoVGHelper = NanoVGHelper.INSTANCE;
             float moduleWidth = nanoVGHelper.getTextWidth(vg, PrefabLove.moduleManager.formatRaw(module), fontSize, Fonts.WQY);
             float xPos = targetX + x.get() - moduleWidth;
@@ -247,48 +339,32 @@ public class ArrayListHud extends Hud {
                 }
             }
 
-            if (background) {
-                float blurStrengthValue = parent.blurStrength.getValue().floatValue();
-                float bgX = xPos - 7F * 0.3F * scale;
-                float bgY = yPos;
-                float bgWidth = moduleWidth + 7F * 0.3F * scale;
-                float bgHeight = height;
+            float bgX = xPos - 7F * 0.3F * scale;
+            float bgY = yPos;
+            float bgWidth = moduleWidth + 7F * 0.3F * scale;
+            float bgHeight = height;
 
-                if (blurStrengthValue > 0) {
-                    parent.stencilFramebuffer = RenderUtil.createFrameBuffer(parent.stencilFramebuffer);
-                    parent.stencilFramebuffer.framebufferClear();
-                    parent.stencilFramebuffer.bindFramebuffer(false);
-                    RoundUtil.drawRound(bgX, bgY, bgWidth, bgHeight, parent.radius.getValue().floatValue(), Color.WHITE);
-                    parent.stencilFramebuffer.unbindFramebuffer();
-
-                    int iterations = Math.max(1, (int)(blurStrengthValue / 10));
-                    int offset = (int)blurStrengthValue;
-                    KawaseBlur.renderBlur(parent.stencilFramebuffer.framebufferTexture, iterations, offset);
-
-                    mc.getFramebuffer().bindFramebuffer(true);
-                }
-
-                nanoVGHelper.drawRoundedRect(vg, bgX, bgY, bgWidth, bgHeight, new Color(32, 32, 32, 100).getRGB(), parent.radius.getValue().floatValue());
-
-                if (parent.shadow.getValue()) {
-                    nanoVGHelper.drawDropShadow(vg, bgX, bgY, bgWidth, bgHeight, 10, 0F, parent.radius.getValue().floatValue(), new Color(0, 0, 0, 100));
-                }
+            if (!skipDraw && background) {
+                int bgAlphaValue = Math.max(0, Math.min(255, (int) parent.bgAlpha.getValue().floatValue()));
+                nanoVGHelper.drawRoundedRect(vg, bgX, bgY, bgWidth, bgHeight, new Color(32, 32, 32, bgAlphaValue).getRGB(), parent.radius.getValue().floatValue());
             }
 
-            float maybeY = yPos + height / 2F + 1 * 0.3F * scale;
-            int colour;
-            switch (parent.colorValue.getValue()) {
-                case 0 -> colour = parent.getCustomOffset((Math.abs(((System.currentTimeMillis()) / 100D * parent.customSpeed.getValue().doubleValue())) / 100D) + (maybeY / 50));
-                case 1 -> colour = parent.getRainbow(6000, (int) (maybeY * 30), 0.85f);
-                case 2 -> colour = parent.getRainbow(6000, (int) (maybeY * 30), 0.55f);
-                case 3 -> colour = parent.getGradientOffset(new Color(255, 60, 234), new Color(27, 179, 255), (Math.abs(((System.currentTimeMillis()) / 100D * parent.customSpeed.getValue().doubleValue())) / 100D) + (maybeY / 50)).getRGB();
-                case 4 -> colour = parent.getGradientOffset(new Color(128, 171, 255), new Color(160, 72, 255), (Math.abs(((System.currentTimeMillis()) / 100D * parent.customSpeed.getValue().doubleValue())) / 100D) + (maybeY / 50)).getRGB();
-                case 5 -> colour = parent.getGradientOffset(new Color(255, 129, 202), new Color(255, 15, 0), (Math.abs(((System.currentTimeMillis()) / 100D * parent.customSpeed.getValue().doubleValue())) / 100D) + (maybeY / 50)).getRGB();
-                default -> colour = -1;
+            if (!skipDraw) {
+                float maybeY = yPos + height / 2F + 1 * 0.3F * scale;
+                int colour;
+                switch (parent.colorValue.getValue()) {
+                    case 0 -> colour = parent.getCustomOffset((Math.abs(((System.currentTimeMillis()) / 100D * parent.customSpeed.getValue().doubleValue())) / 100D) + (maybeY / 50));
+                    case 1 -> colour = parent.getRainbow(6000, (int) (maybeY * 30), 0.85f);
+                    case 2 -> colour = parent.getRainbow(6000, (int) (maybeY * 30), 0.55f);
+                    case 3 -> colour = parent.getGradientOffset(new Color(255, 60, 234), new Color(27, 179, 255), (Math.abs(((System.currentTimeMillis()) / 100D * parent.customSpeed.getValue().doubleValue())) / 100D) + (maybeY / 50)).getRGB();
+                    case 4 -> colour = parent.getGradientOffset(new Color(128, 171, 255), new Color(160, 72, 255), (Math.abs(((System.currentTimeMillis()) / 100D * parent.customSpeed.getValue().doubleValue())) / 100D) + (maybeY / 50)).getRGB();
+                    case 5 -> colour = parent.getGradientOffset(new Color(255, 129, 202), new Color(255, 15, 0), (Math.abs(((System.currentTimeMillis()) / 100D * parent.customSpeed.getValue().doubleValue())) / 100D) + (maybeY / 50)).getRGB();
+                    default -> colour = -1;
+                }
+                nanoVGHelper.drawTextWithFormatting(vg, PrefabLove.moduleManager.format(module), xPos - 2F * 0.3F * scale, maybeY, colour, fontSize, Fonts.WQY);
             }
-            nanoVGHelper.drawTextWithFormatting(vg, PrefabLove.moduleManager.format(module), xPos - 2F * 0.3F * scale, maybeY, colour, fontSize, Fonts.WQY);
 
-            return moduleWidth + 7F * 0.3F * scale;
+            return new ModuleDrawResult(moduleWidth + 7F * 0.3F * scale, bgX, bgY, bgWidth, bgHeight);
         }
     }
 }

@@ -70,7 +70,7 @@ public class IslandHud extends Hud {
         boolean isScaffoldActive = ScaManager.getInstance().isScaffoldActive();
         List<Toggle> activeNotifications = (isTabActive || isBlinkActive || isGappleActive || isScaffoldActive) ?
             java.util.Collections.emptyList() : 
-            Manager.getInstance().getActiveNotifications();
+            ToggleManager.getInstance().getActiveNotifications();
         boolean hasNotifications = !activeNotifications.isEmpty();
 
         double padding = 8;
@@ -174,18 +174,18 @@ public class IslandHud extends Hud {
             
             mc.getFramebuffer().bindFramebuffer(true);
         }
-        
+
         nanovg.setupAndDraw(true, vg -> {
             int bgAlphaValue = Math.max(0, Math.min(255, (int) bgAlpha.getValue().floatValue()));
-            
+
             nanovg.drawRoundedRect(vg, x, y, (float) finalWidth, (float) finalHeight, new Color(0, 0, 0, bgAlphaValue).getRGB(), radius);
-            
+
             if (shadow.getValue()) {
                 nanovg.drawDropShadow(vg, x, y, (float) finalWidth, (float) finalHeight, 10, 0F, radius, new Color(0, 0, 0, bgAlphaValue));
             }
 
             NanoVG.nvgSave(vg);
-            NanoVG.nvgIntersectScissor(vg, x, y, (float) finalWidth, (float) finalHeight);
+            NanoVG.nvgScissor(vg, x + 2, y + 2, (float) finalWidth - 4, (float) finalHeight - 4);
 
             if (isTabActive) {
                 TabRenderer.drawTabList(vg, nanovg, x, y, (float) finalWidth, (float) finalHeight);
@@ -197,15 +197,15 @@ public class IslandHud extends Hud {
                 ScaRenderer.barAnimSpeed = scaffoldBarSpeed.getValue().floatValue();
                 ScaRenderer.drawScaffoldNotification(vg, nanovg, x, y, (float) finalWidth, (float) finalHeight);
             } else if (hasNotifications) {
-                Renderer.toggleBallSpeed = toggleBallSpeed.getValue().floatValue();
-                Renderer.toggleBgSpeed = toggleBgSpeed.getValue().floatValue();
-                Renderer.drawMultipleNotifications(activeNotifications, x + (float)padding, y + (float)padding, (float) finalWidth - (float)padding * 2, (float) finalHeight - (float)padding * 2);
+                ToggleRenderer.toggleBallSpeed = toggleBallSpeed.getValue().floatValue();
+                ToggleRenderer.toggleBgSpeed = toggleBgSpeed.getValue().floatValue();
+                drawNotificationsWithScissor(vg, nanovg, activeNotifications, x + (float)padding, y + (float)padding, (float) finalWidth - (float)padding * 2, (float) finalHeight - (float)padding * 2);
             } else {
                 float iconSize = 20;
                 float iconX = x + 10;
                 float iconY = y + (float)(finalHeight - iconSize) / 2;
                 nanovg.drawSvg(vg, SVGs.PREFABLOVE, iconX, iconY, iconSize, iconSize, Color.WHITE.getRGB(), 255);
-                
+
                 float textX = iconX + iconSize + 8;
                 float textHeight = nanovg.getTextHeight(vg, 12, Fonts.WQY);
                 float textY = y + (float)finalHeight / 2 + textHeight / 2 - 5.5f;
@@ -231,7 +231,7 @@ public class IslandHud extends Hud {
     private void updateAnimations() {
         long currentTime = System.currentTimeMillis();
 
-        List<Toggle> activeNotifications = Manager.getInstance().getActiveNotifications();
+        List<Toggle> activeNotifications = ToggleManager.getInstance().getActiveNotifications();
         boolean hasNotifications = !activeNotifications.isEmpty();
 
         if (targetWidth != lastTargetWidth || targetHeight != lastTargetHeight) {
@@ -265,7 +265,7 @@ public class IslandHud extends Hud {
             return currentWidth;
         }
 
-        List<Toggle> activeNotifications = Manager.getInstance().getActiveNotifications();
+        List<Toggle> activeNotifications = ToggleManager.getInstance().getActiveNotifications();
         boolean hasNotifications = !activeNotifications.isEmpty();
         boolean isEnteringNoticeState = hasNotifications && !wasInNoticeState;
 
@@ -311,7 +311,7 @@ public class IslandHud extends Hud {
             return currentHeight;
         }
 
-        List<Toggle> activeNotifications = Manager.getInstance().getActiveNotifications();
+        List<Toggle> activeNotifications = ToggleManager.getInstance().getActiveNotifications();
         boolean hasNotifications = !activeNotifications.isEmpty();
         boolean isEnteringNoticeState = hasNotifications && !wasInNoticeState;
 
@@ -358,5 +358,18 @@ public class IslandHud extends Hud {
     @Override
     protected float getHeight(float scale, boolean example) {
         return (float) currentHeight * scale;
+    }
+
+    private void drawNotificationsWithScissor(long vg, NanoVGHelper nanovg, List<Toggle> notifications, float x, float y, float width, float height) {
+        if (notifications.isEmpty()) return;
+
+        float itemHeight = 42f;
+        float itemSpacing = 5f;
+
+        float currentY = y;
+        for (Toggle notification : notifications) {
+            ToggleRenderer.drawSingleNotification(vg, nanovg, notification, x, currentY, width, itemHeight, 1.0f);
+            currentY += itemHeight + itemSpacing;
+        }
     }
 }

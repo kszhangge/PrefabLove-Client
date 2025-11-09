@@ -139,10 +139,12 @@ public class AutoGapple extends Module {
 
     @EventListener
     public void onRender(NewRender2DEvent event) {
+
         Module islandModule = PrefabLove.moduleManager.getModuleByName("Island");
         if (islandModule != null && islandModule.isEnabled()) {
             return;
         }
+
         NanoVGHelper nanovg = NanoVGHelper.INSTANCE;
         ScaledResolution resolution = new ScaledResolution(mc);
         int x = resolution.getScaledWidth() / 2;
@@ -161,8 +163,8 @@ public class AutoGapple extends Module {
         RoundUtil.drawGradientHorizontal(x - half, y + 1, animation.getOutput(), thickness, 2, new Color(color(0)), new Color(color(90)));
 
         nanovg.setupAndDraw(true, vg -> {
-            nanovg.drawText(vg,"Time", x - 12, y - 1 - 11 + 6, Color.WHITE.getRGB(), 10, Fonts.BOLD);
-            nanovg.drawText(vg,new DecimalFormat("0.0").format(percentage * 100) + "%", x- 9, y + 4.5f, new Color(207, 207, 207).getRGB(), 6, Fonts.BOLD);
+            nanovg.drawText(vg, "Time", x - 12, y - 1 - 11 + 6, Color.WHITE.getRGB(), 10, Fonts.BOLD);
+            nanovg.drawText(vg, new DecimalFormat("0.0").format(percentage * 100) + "%", x - 9, y + 4.5f, new Color(207, 207, 207).getRGB(), 6, Fonts.BOLD);
         });
     }
 

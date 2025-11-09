@@ -1,12 +1,12 @@
 {
   "Mode": 2,
-  "First Delay": 150,
+  "First Delay": 100.0,
   "Close Delay": 100.0,
   "Min Delay": 0.0,
   "Max Delay": 0.0,
   "Aura": true,
   "AuraRange": 4.5,
-  "AuraDelay": 100.0,
+  "AuraDelay": 0.0,
   "Wait Open Delay": 0.0,
   "No Move": false,
   "Title Check": true,
@@ -19,5 +19,5 @@
       21
     ]
   },
-  "Enabled": false
+  "Enabled": true
 }

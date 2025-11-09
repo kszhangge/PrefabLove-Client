@@ -1,10 +1,11 @@
 {
   "ArrayList": {
-    "Shadow": true,
-    "Blur Strength": 0.0,
-    "Radius": 3.0,
+    "Glow": true,
+    "Blur Strength": 5.0,
+    "Radius": 0.0,
     "No Render Modules": true,
     "Background": true,
+    "Background Alpha": 120.0,
     "Color": 2,
     "Custom Color A": {
       "hsba": [
@@ -31,7 +32,7 @@
       "x": 0.0,
       "y": 0.0
     },
-    "Scale": 1.5,
+    "Scale": 1.2,
     "Show in Chat": true,
     "Show in F3 (Debug)": false,
     "Show in GUIs": true

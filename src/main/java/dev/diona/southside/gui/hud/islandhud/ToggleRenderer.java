@@ -5,10 +5,9 @@ import cc.polyfrost.oneconfig.renderer.font.Fonts;
 
 import java.awt.Color;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-public class Renderer {
+public class ToggleRenderer {
     
     private static final Map<String, Float> toggleAnimations = new HashMap<>();
     private static final Map<String, Float> toggleBgAnimations = new HashMap<>();
@@ -19,28 +18,8 @@ public class Renderer {
     
     public static float toggleBallSpeed = 8.0f;
     public static float toggleBgSpeed = 8.0f;
-    
-    public static void drawMultipleNotifications(List<Toggle> notifications, float x, float y, float width, float height) {
-        if (notifications.isEmpty()) return;
-        
-        float itemHeight = 42f;
-        float itemSpacing = 5f;
-        
-        NanoVGHelper nanovg = NanoVGHelper.INSTANCE;
-        nanovg.setupAndDraw(true, vg -> {
-            float currentY = y;
-            for (Toggle notification : notifications) {
-                drawSingleNotification(vg, nanovg, notification, x, currentY, width, itemHeight, 1.0f);
-                currentY += itemHeight + itemSpacing;
-            }
-        });
-    }
-    
-    private static float easeOutCubic(float t) {
-        return 1 - (float)Math.pow(1 - t, 3);
-    }
-    
-    private static void drawSingleNotification(long vg, NanoVGHelper nanovg, Toggle notification, float x, float y, float width, float height, float alpha) {
+
+    public static void drawSingleNotification(long vg, NanoVGHelper nanovg, Toggle notification, float x, float y, float width, float height, float alpha) {
         String moduleName = notification.getModuleName();
         boolean enabled = notification.isEnabled();
         
@@ -55,19 +34,15 @@ public class Renderer {
         
         float titleSize = 12f;
         float statusSize = 10.5f;
-        
-        float titleWidth = nanovg.getTextWidth(vg, title, titleSize, Fonts.MEDIUM);
+
         float titleHeight = nanovg.getTextHeight(vg, titleSize, Fonts.MEDIUM);
-        
-        String statusLine = moduleNameText + hasBeenText + statusText + exclamation;
-        float statusLineWidth = nanovg.getTextWidth(vg, statusLine, statusSize, Fonts.MEDIUM);
+
         float statusLineHeight = nanovg.getTextHeight(vg, statusSize, Fonts.MEDIUM);
         
         float textSpacing = 4f;
         float totalTextHeight = titleHeight + textSpacing + statusLineHeight;
         float textStartY = y + (height - totalTextHeight) / 2 - 5.45f;
-        
-        float maxTextWidth = Math.max(titleWidth, statusLineWidth);
+
         float textX = x + 6;
         
         float switchX = textX;
@@ -138,10 +113,6 @@ public class Renderer {
         } else {
             toggleSizeAnimations.put(moduleKey, targetSize);
         }
-    }
-    
-    private static float easeInOutCubic(float t) {
-        return t < 0.5f ? 4 * t * t * t : 1 - (float)Math.pow(-2 * t + 2, 3) / 2;
     }
     
     private static void drawModernToggleButton(long vg, NanoVGHelper nanovg, float x, float y, float switchHeight, boolean enabled, float alpha, String moduleKey) {

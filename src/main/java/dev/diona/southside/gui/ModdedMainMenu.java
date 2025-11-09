@@ -50,7 +50,7 @@ public class ModdedMainMenu extends GuiScreen {
         int i = this.width / 2 - 150 / 2;
         this.buttonList.add(new GuiMenuButton(1, i, p_73969_1_ + p_73969_2_, objWidth ,objHeight, I18n.format("menu.singleplayer"), "singleplayer"));
         this.buttonList.add(new GuiMenuButton(2, i, p_73969_1_ + p_73969_2_ * 3, objWidth ,objHeight, I18n.format("menu.multiplayer"), "multiplayer"));
-        this.buttonList.add(new GuiMenuButton(3, i, p_73969_1_ + p_73969_2_ * 5, objWidth ,objHeight, I18n.format("Alt Manager"), "altmanager"));
+        this.buttonList.add(new GuiMenuButton(3, i, p_73969_1_ + p_73969_2_ * 5, objWidth ,objHeight, I18n.format("Alt ToggleManager"), "altmanager"));
         this.buttonList.add(new GuiMenuButton(0, i, p_73969_1_ + p_73969_2_ * 7, objWidth ,objHeight, I18n.format("menu.options"), "settings"));
         this.buttonList.add(new GuiMenuButton(4, i, p_73969_1_ + p_73969_2_  * 9, objWidth ,objHeight, I18n.format("menu.quit"), "exit"));
     }

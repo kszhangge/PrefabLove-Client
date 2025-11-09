@@ -1804,7 +1804,7 @@ public class Shaders {
 		glRendererString = GL11.glGetString(GL11.GL_RENDERER);
 		SMCLog.info("OpenGL Version: " + glVersionString);
 		SMCLog.info("Vendor:  " + glVendorString);
-		SMCLog.info("Renderer: " + glRendererString);
+		SMCLog.info("ToggleRenderer: " + glRendererString);
 		SMCLog.info("Capabilities: " + (capabilities.OpenGL20 ? " 2.0 " : " - ")
 				+ (capabilities.OpenGL21 ? " 2.1 " : " - ") + (capabilities.OpenGL30 ? " 3.0 " : " - ")
 				+ (capabilities.OpenGL32 ? " 3.2 " : " - ") + (capabilities.OpenGL40 ? " 4.0 " : " - "));

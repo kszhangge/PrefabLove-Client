@@ -1,6 +1,7 @@
 package dev.diona.southside.module.modules.client;
 
 import cc.polyfrost.oneconfig.config.options.impl.HUD;
+import dev.diona.southside.PrefabLove;
 import dev.diona.southside.gui.hud.ArrayListHud;
 import dev.diona.southside.module.Category;
 import dev.diona.southside.module.Module;

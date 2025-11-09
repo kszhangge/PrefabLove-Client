@@ -406,7 +406,7 @@ public class RenderManager {
 			CrashReport crashreport = CrashReport.makeCrashReport(throwable3, "Rendering entity in world");
 			CrashReportCategory crashreportcategory = crashreport.makeCategory("Entity being rendered");
 			entityIn.addEntityCrashInfo(crashreportcategory);
-			CrashReportCategory crashreportcategory1 = crashreport.makeCategory("Renderer details");
+			CrashReportCategory crashreportcategory1 = crashreport.makeCategory("ToggleRenderer details");
 			crashreportcategory1.addCrashSection("Assigned renderer", render);
 			crashreportcategory1.addCrashSection("Location", CrashReportCategory.getCoordinateInfo(x, y, z));
 			crashreportcategory1.addCrashSection("Rotation", Float.valueOf(yaw));

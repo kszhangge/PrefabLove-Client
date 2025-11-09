@@ -5,7 +5,7 @@ import cc.polyfrost.oneconfig.config.core.OneKeyBind;
 import cc.polyfrost.oneconfig.config.data.Mod;
 import cc.polyfrost.oneconfig.config.options.impl.KeyBind;
 import dev.diona.southside.PrefabLove;
-import dev.diona.southside.gui.hud.islandhud.Manager;
+import dev.diona.southside.gui.hud.islandhud.ToggleManager;
 import dev.diona.southside.module.annotations.Binding;
 import dev.diona.southside.module.annotations.DefaultEnabled;
 import dev.diona.southside.module.modules.client.Notification;
@@ -86,7 +86,7 @@ public class Module extends Config implements BaseModule, PrefabLove.MC {
     public void setEnableNoSave(boolean enabled) {
         if (enabled) {
             Notification.addNotification("Toggled " + name + " on.", "Module", Notification.NotificationType.ENABLED);
-            Manager.getInstance().addModuleNotification(name, true);
+            ToggleManager.getInstance().addModuleNotification(name, true);
             this.enabled.setValue(true);
             if (!this.onEnable()) {
                 this.enabled.setValue(false);
@@ -95,7 +95,7 @@ public class Module extends Config implements BaseModule, PrefabLove.MC {
             PrefabLove.eventBus.subscribe(this);
         } else {
             Notification.addNotification("Toggled " + name + " off.", "Module", Notification.NotificationType.DISABLED);
-            Manager.getInstance().addModuleNotification(name, false);
+            ToggleManager.getInstance().addModuleNotification(name, false);
             this.enabled.setValue(false);
             if (!this.onDisable()) {
                 this.enabled.setValue(true);

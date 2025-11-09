@@ -10,13 +10,18 @@ public class BlinkRenderer {
     private static final SVG BLINK_SVG = new SVG("/assets/minecraft/southside/blink.svg");
     
     public static void drawBlinkNotification(long vg, NanoVGHelper nanovg, float x, float y, float width, float height) {
-        float iconSize = 24;
+        float displaySize = 24;
+        float renderSize = displaySize * 2;
         float iconX = x + 10;
-        float iconY = y + (height - iconSize) / 2;
+        float iconY = y + (height - displaySize) / 2;
+
+        org.lwjgl.nanovg.NanoVG.nvgSave(vg);
+        org.lwjgl.nanovg.NanoVG.nvgTranslate(vg, iconX, iconY);
+        org.lwjgl.nanovg.NanoVG.nvgScale(vg, displaySize / renderSize, displaySize / renderSize);
+        nanovg.drawSvg(vg, BLINK_SVG, 0, 0, renderSize, renderSize, Color.WHITE.getRGB(), 255);
+        org.lwjgl.nanovg.NanoVG.nvgRestore(vg);
         
-        nanovg.drawSvg(vg, BLINK_SVG, iconX, iconY, iconSize, iconSize, Color.WHITE.getRGB());
-        
-        float textX = iconX + iconSize + 8;
+        float textX = iconX + displaySize + 8;
         
         String titleText = "Packet Blinking";
         float titleSize = 11f;

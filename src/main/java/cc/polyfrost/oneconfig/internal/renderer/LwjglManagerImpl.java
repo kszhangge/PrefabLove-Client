@@ -36,7 +36,7 @@ public class LwjglManagerImpl
 
         implements LwjglManager {
 
-    private static final Logger LOGGER = LogManager.getLogger("OneConfig LWJGL Manager");
+    private static final Logger LOGGER = LogManager.getLogger("OneConfig LWJGL ToggleManager");
     private static final boolean isPojav = checkPojav();
 
 //    private static final Object unsafeInstance;

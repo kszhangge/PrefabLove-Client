@@ -70,7 +70,7 @@ public class ScorePlayerTeam extends Team
      * text.
      *  
      * Note that the prefix is also used to determine the color for the "glowing" effect - see {@link
-     * net.minecraft.client.renderer.entity.Renderer#getTeamColor Renderer.getTeamColor}.
+     * net.minecraft.client.renderer.entity.Renderer#getTeamColor ToggleRenderer.getTeamColor}.
      */
     public String getPrefix()
     {
