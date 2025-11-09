@@ -1,0 +1,271 @@
+[18:06:03] [Client thread/INFO]: Setting user: Player0
+[18:06:04] [Client thread/WARN]: Skipping bad option: lastServer:
+[18:06:04] [Client thread/INFO]: LWJGL Version: 3.3.3+5
+[18:06:04] [Client thread/INFO]: [OptiFine] 
+[18:06:04] [Client thread/INFO]: [OptiFine] OptiFine_1.12.2_HD_U_G6_pre1
+[18:06:04] [Client thread/INFO]: [OptiFine] Build: null
+[18:06:04] [Client thread/INFO]: [OptiFine] OS: Windows 11 (amd64) version 10.0
+[18:06:04] [Client thread/INFO]: [OptiFine] Java: 17.0.12, Oracle Corporation
+[18:06:04] [Client thread/INFO]: [OptiFine] VM: Java HotSpot(TM) 64-Bit Server VM (mixed mode, sharing), Oracle Corporation
+[18:06:04] [Client thread/INFO]: [OptiFine] LWJGL: 3.3.3+5
+[18:06:04] [Client thread/INFO]: [OptiFine] OpenGL: NVIDIA GeForce RTX 3060/PCIe/SSE2, version 4.6.0 NVIDIA 576.52, NVIDIA Corporation
+[18:06:04] [Client thread/INFO]: [OptiFine] OpenGL Version: 4.6.0
+[18:06:04] [Client thread/INFO]: [OptiFine] Maximum texture size: 32768x32768
+[18:06:04] [Client thread/INFO]: [Shaders] OpenGL Version: 4.6.0 NVIDIA 576.52
+[18:06:04] [Client thread/INFO]: [Shaders] Vendor:  NVIDIA Corporation
+[18:06:04] [Client thread/INFO]: [Shaders] Renderer: NVIDIA GeForce RTX 3060/PCIe/SSE2
+[18:06:04] [Client thread/INFO]: [Shaders] Capabilities:  2.0  2.1  3.0  3.2  4.0 
+[18:06:04] [Client thread/INFO]: [Shaders] GL_MAX_DRAW_BUFFERS: 8
+[18:06:04] [Client thread/INFO]: [Shaders] GL_MAX_COLOR_ATTACHMENTS_EXT: 8
+[18:06:04] [Client thread/INFO]: [Shaders] GL_MAX_TEXTURE_IMAGE_UNITS: 32
+[18:06:04] [Client thread/INFO]: [Shaders] Load shaders configuration.
+[18:06:04] [Client thread/INFO]: [Shaders] Save shaders configuration.
+[18:06:04] [Client thread/INFO]: [Shaders] No shaderpack loaded.
+[18:06:04] [Client thread/INFO]: [STDERR]: SLF4J: No SLF4J providers were found.
+[18:06:04] [Client thread/INFO]: [STDERR]: SLF4J: Defaulting to no-operation (NOP) logger implementation
+[18:06:04] [Client thread/INFO]: [STDERR]: SLF4J: See https://www.slf4j.org/codes.html#noProviders for further details.
+[18:06:05] [Client thread/INFO]: Reloading ResourceManager: Default, 单行道喜欢用的特殊音效材质包.zip
+[18:06:05] [Client thread/INFO]: [OptiFine] *** Reloading textures ***
+[18:06:05] [Client thread/INFO]: [OptiFine] Resource packs: 单行道喜欢用的特殊音效材质包.zip
+[18:06:05] [Client thread/INFO]: [OptiFine] *** Reflector Forge ***
+[18:06:05] [Client thread/INFO]: [OptiFine] *** Reflector Vanilla ***
+[18:06:05] [Sound Library Loader/INFO]: Starting up SoundSystem...
+[18:06:05] [Client thread/INFO]: [OptiFine] Loading textures/font/ascii.properties
+[18:06:05] [Client thread/INFO]: [OptiFine] Loading textures/font/ascii_sga.properties
+[18:06:05] [Thread-2/INFO]: Initializing LWJGL OpenAL
+[18:06:05] [Thread-2/INFO]: (The LWJGL binding of OpenAL.  For more information, see http://www.lwjgl.org)
+[18:06:06] [Thread-2/INFO]: OpenAL initialized.
+[18:06:06] [Sound Library Loader/INFO]: Sound engine started
+[18:06:07] [Client thread/INFO]: [OptiFine] Mipmap levels: 4
+[18:06:07] [Client thread/INFO]: [OptiFine] Multitexture: false
+[18:06:07] [Client thread/WARN]: [OptiFine] Skipping non-lowercase path: mcpatcher/ctm/glass/Black Glass/glass_black.properties
+[18:06:07] [Client thread/WARN]: [OptiFine] Skipping non-lowercase path: mcpatcher/ctm/glass/Blue Glass/glass_blue.properties
+[18:06:07] [Client thread/WARN]: [OptiFine] Skipping non-lowercase path: mcpatcher/ctm/glass/Brown Glass/glass_brown.properties
+[18:06:07] [Client thread/WARN]: [OptiFine] Skipping non-lowercase path: mcpatcher/ctm/glass/Cyan Glass/glass_cyan.properties
+[18:06:07] [Client thread/WARN]: [OptiFine] Skipping non-lowercase path: mcpatcher/ctm/glass/Green Glass/glass_green.properties
+[18:06:07] [Client thread/WARN]: [OptiFine] Skipping non-lowercase path: mcpatcher/ctm/glass/Grey Glass/glass_gray.properties
+[18:06:07] [Client thread/WARN]: [OptiFine] Skipping non-lowercase path: mcpatcher/ctm/glass/Light Blue Glass/glass_light_blue.properties
+[18:06:07] [Client thread/WARN]: [OptiFine] Skipping non-lowercase path: mcpatcher/ctm/glass/Light Grey Glass/glass_silver.properties
+[18:06:07] [Client thread/WARN]: [OptiFine] Skipping non-lowercase path: mcpatcher/ctm/glass/Lime Glass/glass_lime.properties
+[18:06:07] [Client thread/WARN]: [OptiFine] Skipping non-lowercase path: mcpatcher/ctm/glass/Magenta Glass/glass_magenta.properties
+[18:06:07] [Client thread/WARN]: [OptiFine] Skipping non-lowercase path: mcpatcher/ctm/glass/Normal/glass.properties
+[18:06:07] [Client thread/WARN]: [OptiFine] Skipping non-lowercase path: mcpatcher/ctm/glass/Orange Glass/glass_orange.properties
+[18:06:07] [Client thread/WARN]: [OptiFine] Skipping non-lowercase path: mcpatcher/ctm/glass/Pink Glass/glass_pink.properties
+[18:06:07] [Client thread/WARN]: [OptiFine] Skipping non-lowercase path: mcpatcher/ctm/glass/Purple Glass/glass_purple.properties
+[18:06:07] [Client thread/WARN]: [OptiFine] Skipping non-lowercase path: mcpatcher/ctm/glass/Red Glass/glass_red.properties
+[18:06:07] [Client thread/WARN]: [OptiFine] Skipping non-lowercase path: mcpatcher/ctm/glass/White Glass/glass_white.properties
+[18:06:07] [Client thread/WARN]: [OptiFine] Skipping non-lowercase path: mcpatcher/ctm/glass/Yellow Glass/glass_yellow.properties
+[18:06:07] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/glass black/glass_black.properties
+[18:06:07] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/glass blue/glass_blue.properties
+[18:06:07] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/glass brown/glass_brown.properties
+[18:06:07] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/glass cyan/glass_cyan.properties
+[18:06:07] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/glass gray/glass_gray.properties
+[18:06:07] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/glass green/glass_green.properties
+[18:06:07] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/glass light blue/glass_light_blue.properties
+[18:06:07] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/glass light gray/glass_silver.properties
+[18:06:07] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/glass lime/glass_lime.properties
+[18:06:07] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/glass magenta/glass_magenta.properties
+[18:06:07] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/glass orange/glass_orange.properties
+[18:06:07] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/glass pink/glass_pink.properties
+[18:06:07] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/glass purple/glass_purple.properties
+[18:06:07] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/glass red/glass_red.properties
+[18:06:07] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/glass white/glass_white.properties
+[18:06:07] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/glass yellow/glass_yellow.properties
+[18:06:07] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/glass/glass.properties
+[18:06:07] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/glass_clear/glass.properties
+[18:06:07] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/glass_gray/glass_gray.properties
+[18:06:07] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/glass_stained/glass_black/glass_black.properties
+[18:06:07] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/glass_stained/glass_blue/glass_blue.properties
+[18:06:07] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/glass_stained/glass_brown/glass_brown.properties
+[18:06:07] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/glass_stained/glass_cyan/glass_cyan.properties
+[18:06:07] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/glass_stained/glass_gray/glass_gray.properties
+[18:06:07] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/glass_stained/glass_green/glass_green.properties
+[18:06:07] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/glass_stained/glass_light_blue/glass_light_blue.properties
+[18:06:07] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/glass_stained/glass_lime/glass_lime.properties
+[18:06:07] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/glass_stained/glass_magenta/glass_magenta.properties
+[18:06:07] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/glass_stained/glass_orange/glass_orange.properties
+[18:06:07] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/glass_stained/glass_pink/glass_pink.properties
+[18:06:07] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/glass_stained/glass_purple/glass_purple.properties
+[18:06:07] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/glass_stained/glass_red/glass_red.properties
+[18:06:07] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/glass_stained/glass_silver/glass_silver.properties
+[18:06:07] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/glass_stained/glass_white/glass_white.properties
+[18:06:07] [Client thread/INFO]: [OptiFine] ConnectedTextures: mcpatcher/ctm/glass_stained/glass_yellow/glass_yellow.properties
+[18:06:07] [Client thread/INFO]: [OptiFine] Multipass connected textures: false
+[18:06:07] [Client thread/INFO]: [OptiFine] Multipass connected textures: false
+[18:06:07] [Client thread/INFO]: [OptiFine] BetterGrass: Parsing default configuration optifine/bettergrass.properties
+[18:06:09] [Client thread/INFO]: Created: 4096x2048 textures-atlas
+[18:06:09] [Client thread/INFO]: [OptiFine] Animated sprites: 23
+[18:06:09] [Via-Mappingloader-0/INFO]: Loading block connection mappings ...
+[18:06:09] [Via-Mappingloader-0/INFO]: Using FastUtil Long2ObjectOpenHashMap for block connections
+[18:06:09] [Client thread/INFO]: Loaded Platform ViaVersion
+[18:06:09] [Client thread/INFO]: Loading translations...
+[18:06:09] [Client thread/INFO]: Registering protocols...
+[18:06:10] [Client thread/INFO]: Loaded Platform ViaBackwards
+[18:06:10] [Client thread/INFO]: ViaVersion detected lowest supported version by the proxy: 1.4.6/7 (51)
+[18:06:10] [Client thread/INFO]: Highest supported version by the proxy: 1.20.3/1.20.4 (765)
+[18:06:10] [Via Async Scheduler 0/INFO]: Finished mapping loading, shutting down loader executor!
+[18:06:10] [Client thread/INFO]: ViaLoadingBase has loaded 2/2 platforms
+[18:06:10] [Client thread/INFO]: Starting PrefabLove...
+[18:06:10] [Client thread/INFO]: Loaded fonts in: 63ms
+[18:06:10] [Client thread/INFO]: [OptiFine] *** Reloading custom textures ***
+[18:06:10] [Client thread/INFO]: [OptiFine] CustomColors: Colormap mcpatcher/colormap/sky0.png
+[18:06:10] [Client thread/INFO]: [OptiFine] CustomColors: Colormap mcpatcher/lightmap/world0.png
+[18:06:10] [Client thread/INFO]: [OptiFine] CustomColors: Loading mcpatcher/color.properties
+[18:06:10] [Client thread/INFO]: [OptiFine] CustomColors: lilypad = 6aef3f
+[18:06:10] [Client thread/INFO]: [OptiFine] CustomColors: sky.end = FFFFFF
+[18:06:10] [Client thread/INFO]: [OptiFine] CustomSky properties: mcpatcher/sky/world0/sky1.properties
+[18:06:10] [Client thread/INFO]: [OptiFine] CustomSky properties: mcpatcher/sky/world0/sky2.properties
+[18:06:10] [Client thread/INFO]: [OptiFine] CustomSky properties: mcpatcher/sky/world0/sky3.properties
+[18:06:11] [Via Async Task 1/WARN]: There is a newer plugin version available: 5.5.1, you're on: 4.9.3-SNAPSHOT
+[18:06:11] [Client thread/INFO]: [OptiFine] CustomSky properties: mcpatcher/sky/world0/sky4.properties
+[18:06:11] [Client thread/INFO]: [OptiFine] CustomSky properties: mcpatcher/sky/world0/sky5.properties
+[18:06:11] [Client thread/INFO]: [OptiFine] CustomSky: Texture not found: minecraft:mcpatcher/sky/world0/starfield02.png
+[18:06:11] [Client thread/INFO]: [OptiFine] CustomSky properties: mcpatcher/sky/world0/sky6.properties
+[18:06:11] [Client thread/INFO]: [OptiFine] CustomSky properties: mcpatcher/sky/world0/sky7.properties
+[18:06:11] [Client thread/INFO]: [OptiFine] CustomSky properties: mcpatcher/sky/world0/sky8.properties
+[18:06:21] [Server thread/INFO]: Starting integrated minecraft server version 1.12.2
+[18:06:21] [Server thread/INFO]: Generating keypair
+[18:06:21] [Server thread/INFO]: Loaded 488 advancements
+[18:06:21] [Server thread/INFO]: Preparing start region for level 0
+[18:06:21] [Server thread/INFO]: Changing view distance to 8, from 10
+[18:06:21] [Server thread/INFO]: Player0[local:E:c21f2274] logged in with entity id 35 at (-232.7146708088557, 13.0, -360.06645412763504)
+[18:06:21] [Server thread/INFO]: Player0 joined the game
+[18:06:22] [Server thread/INFO]: Saving and pausing game...
+[18:06:22] [Server thread/INFO]: Saving chunks for level 'New World'/overworld
+[18:06:22] [Client thread/WARN]: Could not find uniform named InSize in the specified shader program.
+[18:06:22] [Client thread/WARN]: [OptiFine] java.lang.NullPointerException Cannot invoke "net.minecraft.world.World.getLightingEngine()" because "this.world" is null
+[18:06:22] [Client thread/WARN]: [OptiFine] Error finding Chunk.hasEntities
+[18:06:22] [Server thread/INFO]: Saving chunks for level 'New World'/the_nether
+[18:06:22] [Server thread/INFO]: Saving chunks for level 'New World'/the_end
+[18:06:22] [Client thread/INFO]: [STDERR]: java.io.FileNotFoundException: minecraft:prefablove/shaders/vertex.vsh
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.resources.FallbackResourceManager.getResource(FallbackResourceManager.java:66)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.resources.SimpleReloadableResourceManager.getResource(SimpleReloadableResourceManager.java:62)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at dev.diona.southside.util.render.ShaderUtil.<init>(ShaderUtil.java:71)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at dev.diona.southside.util.render.ShaderUtil.<init>(ShaderUtil.java:113)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at dev.diona.southside.util.render.RoundUtil.<clinit>(RoundUtil.java:12)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at dev.diona.southside.gui.hud.islandhud.IslandHud.drawIsland(IslandHud.java:168)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at dev.diona.southside.gui.hud.islandhud.IslandHud.draw(IslandHud.java:123)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at cc.polyfrost.oneconfig.hud.Hud.drawAll(Hud.java:198)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at cc.polyfrost.oneconfig.internal.hud.HudCore.onRender(HudCore.java:52)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at me.kbrewster.eventbus.EventBus$Subscriber.invoke(EventBus.java:31)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at me.kbrewster.eventbus.EventBus.post(EventBus.java:116)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at cc.polyfrost.oneconfig.events.EventManager.post(EventManager.java:146)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.gui.GuiIngame.renderGameOverlay(GuiIngame.java:408)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.renderer.EntityRenderer.updateCameraAndRender(EntityRenderer.java:1350)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.Minecraft.runGameLoop(Minecraft.java:1228)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.Minecraft.run(Minecraft.java:536)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.main.Main.main(Main.java:111)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at Start.main(Start.java:38)
+[18:06:22] [Client thread/INFO]: [STDERR]: java.io.FileNotFoundException: minecraft:prefablove/shaders/vertex.vsh
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.resources.FallbackResourceManager.getResource(FallbackResourceManager.java:66)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.resources.SimpleReloadableResourceManager.getResource(SimpleReloadableResourceManager.java:62)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at dev.diona.southside.util.render.ShaderUtil.<init>(ShaderUtil.java:71)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at dev.diona.southside.util.render.ShaderUtil.<init>(ShaderUtil.java:113)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at dev.diona.southside.util.render.RoundUtil.<clinit>(RoundUtil.java:13)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at dev.diona.southside.gui.hud.islandhud.IslandHud.drawIsland(IslandHud.java:168)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at dev.diona.southside.gui.hud.islandhud.IslandHud.draw(IslandHud.java:123)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at cc.polyfrost.oneconfig.hud.Hud.drawAll(Hud.java:198)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at cc.polyfrost.oneconfig.internal.hud.HudCore.onRender(HudCore.java:52)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at me.kbrewster.eventbus.EventBus$Subscriber.invoke(EventBus.java:31)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at me.kbrewster.eventbus.EventBus.post(EventBus.java:116)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at cc.polyfrost.oneconfig.events.EventManager.post(EventManager.java:146)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.gui.GuiIngame.renderGameOverlay(GuiIngame.java:408)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.renderer.EntityRenderer.updateCameraAndRender(EntityRenderer.java:1350)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.Minecraft.runGameLoop(Minecraft.java:1228)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.Minecraft.run(Minecraft.java:536)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.main.Main.main(Main.java:111)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at Start.main(Start.java:38)
+[18:06:22] [Client thread/INFO]: [STDERR]: java.io.FileNotFoundException: minecraft:prefablove/shaders/vertex.vsh
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.resources.FallbackResourceManager.getResource(FallbackResourceManager.java:66)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.resources.SimpleReloadableResourceManager.getResource(SimpleReloadableResourceManager.java:62)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at dev.diona.southside.util.render.ShaderUtil.<init>(ShaderUtil.java:71)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at dev.diona.southside.util.render.ShaderUtil.<init>(ShaderUtil.java:113)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at dev.diona.southside.util.render.RoundUtil.<clinit>(RoundUtil.java:14)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at dev.diona.southside.gui.hud.islandhud.IslandHud.drawIsland(IslandHud.java:168)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at dev.diona.southside.gui.hud.islandhud.IslandHud.draw(IslandHud.java:123)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at cc.polyfrost.oneconfig.hud.Hud.drawAll(Hud.java:198)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at cc.polyfrost.oneconfig.internal.hud.HudCore.onRender(HudCore.java:52)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at me.kbrewster.eventbus.EventBus$Subscriber.invoke(EventBus.java:31)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at me.kbrewster.eventbus.EventBus.post(EventBus.java:116)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at cc.polyfrost.oneconfig.events.EventManager.post(EventManager.java:146)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.gui.GuiIngame.renderGameOverlay(GuiIngame.java:408)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.renderer.EntityRenderer.updateCameraAndRender(EntityRenderer.java:1350)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.Minecraft.runGameLoop(Minecraft.java:1228)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.Minecraft.run(Minecraft.java:536)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.main.Main.main(Main.java:111)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at Start.main(Start.java:38)
+[18:06:22] [Client thread/INFO]: [STDERR]: java.io.FileNotFoundException: minecraft:prefablove/shaders/vertex.vsh
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.resources.FallbackResourceManager.getResource(FallbackResourceManager.java:66)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.resources.SimpleReloadableResourceManager.getResource(SimpleReloadableResourceManager.java:62)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at dev.diona.southside.util.render.ShaderUtil.<init>(ShaderUtil.java:71)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at dev.diona.southside.util.render.ShaderUtil.<init>(ShaderUtil.java:113)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at dev.diona.southside.util.render.RoundUtil.<clinit>(RoundUtil.java:15)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at dev.diona.southside.gui.hud.islandhud.IslandHud.drawIsland(IslandHud.java:168)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at dev.diona.southside.gui.hud.islandhud.IslandHud.draw(IslandHud.java:123)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at cc.polyfrost.oneconfig.hud.Hud.drawAll(Hud.java:198)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at cc.polyfrost.oneconfig.internal.hud.HudCore.onRender(HudCore.java:52)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at me.kbrewster.eventbus.EventBus$Subscriber.invoke(EventBus.java:31)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at me.kbrewster.eventbus.EventBus.post(EventBus.java:116)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at cc.polyfrost.oneconfig.events.EventManager.post(EventManager.java:146)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.gui.GuiIngame.renderGameOverlay(GuiIngame.java:408)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.renderer.EntityRenderer.updateCameraAndRender(EntityRenderer.java:1350)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.Minecraft.runGameLoop(Minecraft.java:1228)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.Minecraft.run(Minecraft.java:536)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.main.Main.main(Main.java:111)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at Start.main(Start.java:38)
+[18:06:22] [Client thread/INFO]: [STDERR]: java.io.FileNotFoundException: minecraft:prefablove/shaders/vertex.vsh
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.resources.FallbackResourceManager.getResource(FallbackResourceManager.java:66)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.resources.SimpleReloadableResourceManager.getResource(SimpleReloadableResourceManager.java:62)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at dev.diona.southside.util.render.ShaderUtil.<init>(ShaderUtil.java:71)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at dev.diona.southside.util.render.ShaderUtil.<init>(ShaderUtil.java:113)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at dev.diona.southside.util.render.blur.KawaseBlur.<clinit>(KawaseBlur.java:20)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at dev.diona.southside.gui.hud.islandhud.IslandHud.drawIsland(IslandHud.java:173)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at dev.diona.southside.gui.hud.islandhud.IslandHud.draw(IslandHud.java:123)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at cc.polyfrost.oneconfig.hud.Hud.drawAll(Hud.java:198)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at cc.polyfrost.oneconfig.internal.hud.HudCore.onRender(HudCore.java:52)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at me.kbrewster.eventbus.EventBus$Subscriber.invoke(EventBus.java:31)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at me.kbrewster.eventbus.EventBus.post(EventBus.java:116)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at cc.polyfrost.oneconfig.events.EventManager.post(EventManager.java:146)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.gui.GuiIngame.renderGameOverlay(GuiIngame.java:408)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.renderer.EntityRenderer.updateCameraAndRender(EntityRenderer.java:1350)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.Minecraft.runGameLoop(Minecraft.java:1228)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.Minecraft.run(Minecraft.java:536)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.main.Main.main(Main.java:111)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at Start.main(Start.java:38)
+[18:06:22] [Client thread/INFO]: [STDERR]: java.io.FileNotFoundException: minecraft:prefablove/shaders/vertex.vsh
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.resources.FallbackResourceManager.getResource(FallbackResourceManager.java:66)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.resources.SimpleReloadableResourceManager.getResource(SimpleReloadableResourceManager.java:62)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at dev.diona.southside.util.render.ShaderUtil.<init>(ShaderUtil.java:71)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at dev.diona.southside.util.render.ShaderUtil.<init>(ShaderUtil.java:113)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at dev.diona.southside.util.render.blur.KawaseBlur.<clinit>(KawaseBlur.java:21)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at dev.diona.southside.gui.hud.islandhud.IslandHud.drawIsland(IslandHud.java:173)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at dev.diona.southside.gui.hud.islandhud.IslandHud.draw(IslandHud.java:123)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at cc.polyfrost.oneconfig.hud.Hud.drawAll(Hud.java:198)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at cc.polyfrost.oneconfig.internal.hud.HudCore.onRender(HudCore.java:52)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at me.kbrewster.eventbus.EventBus$Subscriber.invoke(EventBus.java:31)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at me.kbrewster.eventbus.EventBus.post(EventBus.java:116)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at cc.polyfrost.oneconfig.events.EventManager.post(EventManager.java:146)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.gui.GuiIngame.renderGameOverlay(GuiIngame.java:408)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.renderer.EntityRenderer.updateCameraAndRender(EntityRenderer.java:1350)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.Minecraft.runGameLoop(Minecraft.java:1228)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.Minecraft.run(Minecraft.java:536)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at net.minecraft.client.main.Main.main(Main.java:111)
+[18:06:22] [Client thread/INFO]: [STDERR]: 	at Start.main(Start.java:38)
+[18:06:23] [Client thread/INFO]: Loaded 41 advancements
+[18:06:24] [Server thread/INFO]: Saving and pausing game...
+[18:06:24] [Server thread/INFO]: Saving chunks for level 'New World'/overworld
+[18:06:25] [Server thread/INFO]: Saving chunks for level 'New World'/the_nether
+[18:06:25] [Server thread/INFO]: Saving chunks for level 'New World'/the_end
+[18:06:29] [Client thread/INFO]: Stopping!
+[18:06:29] [Client thread/INFO]: SoundSystem shutting down...
+[18:06:29] [Server thread/INFO]: Stopping server
+[18:06:29] [Server thread/INFO]: Saving players
+[18:06:29] [Server thread/INFO]: Player0 lost connection: Disconnected
+[18:06:29] [Server thread/INFO]: Player0 left the game
+[18:06:29] [Server thread/INFO]: Stopping singleplayer server as player logged out
+[18:06:29] [Server thread/INFO]: Saving worlds
+[18:06:29] [Server thread/INFO]: Saving chunks for level 'New World'/overworld
+[18:06:29] [Server thread/INFO]: Saving chunks for level 'New World'/the_nether
+[18:06:29] [Server thread/INFO]: Saving chunks for level 'New World'/the_end
+[18:06:29] [Client thread/WARN]: Author: Paul Lamb, www.paulscode.com
+[18:06:29] [Client thread/INFO]: Stopping PrefabLove...

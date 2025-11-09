@@ -1,0 +1,107 @@
+---- Minecraft Crash Report ----
+// Hey, that tickles! Hehehe!
+
+Time: 2025-11-08 22:31
+Description: Updating screen events
+
+java.lang.ArrayIndexOutOfBoundsException: Index 2 out of bounds for length 2
+	at dev.diona.southside.command.commands.ConfigCommand.run(ConfigCommand.java:82)
+	at dev.diona.southside.managers.CommandManager.onMessage(CommandManager.java:54)
+	at me.bush.eventbus.handler.handlers.LambdaHandler.invoke(LambdaHandler.java:71)
+	at me.bush.eventbus.bus.EventBus.post(EventBus.java:141)
+	at net.minecraft.client.gui.GuiScreen.sendChatMessage(GuiScreen.java:457)
+	at net.minecraft.client.gui.GuiScreen.sendChatMessage(GuiScreen.java:451)
+	at net.optifine.gui.GuiChatOF.sendChatMessage(GuiChatOF.java:29)
+	at net.minecraft.client.gui.GuiChat.keyTyped(GuiChat.java:132)
+	at net.minecraft.client.gui.GuiScreen.handleKeyboardInput(GuiScreen.java:619)
+	at net.minecraft.client.gui.GuiScreen.handleInput(GuiScreen.java:568)
+	at net.minecraft.client.Minecraft.runTick(Minecraft.java:1792)
+	at net.minecraft.client.Minecraft.runGameLoop(Minecraft.java:1180)
+	at net.minecraft.client.Minecraft.run(Minecraft.java:536)
+	at net.minecraft.client.main.Main.main(Main.java:111)
+	at Start.main(Start.java:39)
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- Head --
+Thread: Client thread
+Stacktrace:
+	at dev.diona.southside.command.commands.ConfigCommand.run(ConfigCommand.java:82)
+	at dev.diona.southside.managers.CommandManager.onMessage(CommandManager.java:54)
+	at me.bush.eventbus.handler.handlers.LambdaHandler.invoke(LambdaHandler.java:71)
+	at me.bush.eventbus.bus.EventBus.post(EventBus.java:141)
+	at net.minecraft.client.gui.GuiScreen.sendChatMessage(GuiScreen.java:457)
+	at net.minecraft.client.gui.GuiScreen.sendChatMessage(GuiScreen.java:451)
+	at net.optifine.gui.GuiChatOF.sendChatMessage(GuiChatOF.java:29)
+	at net.minecraft.client.gui.GuiChat.keyTyped(GuiChat.java:132)
+	at net.minecraft.client.gui.GuiScreen.handleKeyboardInput(GuiScreen.java:619)
+	at net.minecraft.client.gui.GuiScreen.handleInput(GuiScreen.java:568)
+
+-- Affected screen --
+Details:
+	Screen name: net.optifine.gui.GuiChatOF
+
+-- Affected level --
+Details:
+	Level name: MpServer
+	All players: 1 total; [EntityPlayerSP['Player0'/34, l='MpServer', x=-234.89, y=146.00, z=-318.81]]
+	Chunk stats: MultiplayerChunkCache: 279, 279
+	Level seed: 0
+	Level generator: ID 01 - flat, ver 0. Features enabled: false
+	Level generator options: 
+	Level spawn location: World: (-54,4,-474), Chunk: (at 10,0,6 in -4,-30; contains blocks -64,0,-480 to -49,255,-465), Region: (-1,-1; contains chunks -32,-32 to -1,-1, blocks -512,0,-512 to -1,255,-1)
+	Level time: 70653 game time, 70653 day time
+	Level dimension: 0
+	Level storage version: 0x00000 - Unknown?
+	Level weather: Rain time: 0 (now: false), thunder time: 0 (now: false)
+	Level game mode: Game mode: creative (ID 1). Hardcore: false. Cheats: false
+	Forced entities: 1 total; [EntityPlayerSP['Player0'/34, l='MpServer', x=-234.89, y=146.00, z=-318.81]]
+	Retry entities: 0 total; []
+	Server brand: vanilla
+	Server type: Integrated singleplayer server
+Stacktrace:
+	at net.minecraft.client.multiplayer.WorldClient.addWorldInfoToCrashReport(WorldClient.java:523)
+	at net.minecraft.client.Minecraft.addGraphicsAndWorldToCrashReport(Minecraft.java:2707)
+	at net.minecraft.client.Minecraft.run(Minecraft.java:549)
+	at net.minecraft.client.main.Main.main(Main.java:111)
+	at Start.main(Start.java:39)
+
+-- System Details --
+Details:
+	Minecraft Version: 1.12.2
+	Operating System: Windows 11 (amd64) version 10.0
+	Java Version: 17.0.12, Oracle Corporation
+	Java VM Version: Java HotSpot(TM) 64-Bit Server VM (mixed mode, sharing), Oracle Corporation
+	Memory: 107667968 bytes (102 MB) / 354418688 bytes (338 MB) up to 4253024256 bytes (4056 MB)
+	JVM Flags: 0 total; 
+	IntCache: cache: 0, tcache: 0, allocated: 0, tallocated: 0
+	Launched Version: mcp
+	LWJGL: 3.3.3+5
+	OpenGL: NVIDIA GeForce RTX 3060/PCIe/SSE2 GL version 4.6.0 NVIDIA 576.52, NVIDIA Corporation
+	GL Caps: Using GL 1.3 multitexturing.
+Using GL 1.3 texture combiners.
+Using framebuffer objects because OpenGL 3.0 is supported and separate blending is supported.
+Shaders are available because OpenGL 2.1 is supported.
+VBOs are available because OpenGL 1.5 is supported.
+
+	Using VBOs: Yes
+	Is Modded: Definitely; Client brand changed to 'fml,forge'
+	Type: Client (map_client.txt)
+	Resource Packs: 单行道喜欢用的特殊音效材质包.zip
+	Current Language: English (US)
+	Profiler Position: N/A (disabled)
+	CPU: 12 x 12th Gen Intel(R) Core(TM) i5-12400F
+	OptiFine Version: OptiFine_1.12.2_HD_U_G6_pre1
+	OptiFine Build: ~~NULL~~
+	Render Distance Chunks: 8
+	Mipmaps: 4
+	Anisotropic Filtering: 1
+	Antialiasing: 0
+	Multitexture: false
+	Shaders: null
+	OpenGlVersion: 4.6.0 NVIDIA 576.52
+	OpenGlRenderer: NVIDIA GeForce RTX 3060/PCIe/SSE2
+	OpenGlVendor: NVIDIA Corporation
+	CpuCount: 12

@@ -1,0 +1,13 @@
+{
+  "Mode": 0,
+  "Grim Post": true,
+  "Grim No Slow": false,
+  "Grim Rotation": true,
+  "Grim Blink": true,
+  "Bind": {
+    "keyBinds": [
+      0
+    ]
+  },
+  "Enabled": false
+}

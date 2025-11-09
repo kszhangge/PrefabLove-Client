@@ -1,0 +1,17 @@
+{
+  "Delay": 50,
+  "Layers": 1,
+  "Rotation Mode": 0,
+  "Min Rotation Speed": 180,
+  "Max Rotation Speed": 180,
+  "Rotation": true,
+  "Ray cast": true,
+  "Render": true,
+  "Legit": true,
+  "Bind": {
+    "keyBinds": [
+      0
+    ]
+  },
+  "Enabled": false
+}

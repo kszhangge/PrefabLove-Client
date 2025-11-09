@@ -1,0 +1,89 @@
+---- Minecraft Crash Report ----
+// You should try our sister game, Minceraft!
+
+Time: 2025-11-09 13:39
+Description: Unexpected error
+
+java.lang.ClassCastException: class com.google.gson.internal.LazilyParsedNumber cannot be cast to class java.lang.Float (com.google.gson.internal.LazilyParsedNumber is in unnamed module of loader 'app'; java.lang.Float is in module java.base of loader 'bootstrap')
+	at dev.diona.southside.module.modules.player.Blink.onTick(Blink.java:145)
+	at me.bush.eventbus.handler.handlers.LambdaHandler.invoke(LambdaHandler.java:71)
+	at me.bush.eventbus.bus.EventBus.post(EventBus.java:141)
+	at net.minecraft.client.Minecraft.runTick(Minecraft.java:1839)
+	at net.minecraft.client.Minecraft.runGameLoop(Minecraft.java:1180)
+	at net.minecraft.client.Minecraft.run(Minecraft.java:536)
+	at net.minecraft.client.main.Main.main(Main.java:111)
+	at Start.main(Start.java:39)
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- Head --
+Thread: Client thread
+Stacktrace:
+	at dev.diona.southside.module.modules.player.Blink.onTick(Blink.java:145)
+	at me.bush.eventbus.handler.handlers.LambdaHandler.invoke(LambdaHandler.java:71)
+	at me.bush.eventbus.bus.EventBus.post(EventBus.java:141)
+
+-- Affected level --
+Details:
+	Level name: MpServer
+	All players: 7 total; [EntityPlayerSP['RealDiZi'/599022, l='MpServer', x=283.89, y=62.00, z=182.76], EntityOtherPlayerMP['tzi_WIB3X_11_03'/598540, l='MpServer', x=269.85, y=81.05, z=175.50], EntityOtherPlayerMP['Cute_N_eko'/592914, l='MpServer', x=244.13, y=62.00, z=181.00], EntityOtherPlayerMP['DSJ_'/598495, l='MpServer', x=247.25, y=62.00, z=182.13], FakePlayer['tzi_WIB3X_11_03'/-1, l='MpServer', x=269.85, y=81.05, z=175.50], FakePlayer['Cute_N_eko'/-2, l='MpServer', x=0.16, y=0.00, z=-0.22], FakePlayer['RealDiZi'/-3, l='MpServer', x=283.89, y=62.00, z=182.76]]
+	Chunk stats: MultiplayerChunkCache: 440, 440
+	Level seed: 0
+	Level generator: ID 01 - flat, ver 0. Features enabled: false
+	Level generator options: 
+	Level spawn location: World: (211,61,176), Chunk: (at 3,3,0 in 13,11; contains blocks 208,0,176 to 223,255,191), Region: (0,0; contains chunks 0,0 to 31,31, blocks 0,0,0 to 511,255,511)
+	Level time: 43227 game time, 1000 day time
+	Level dimension: 0
+	Level storage version: 0x00000 - Unknown?
+	Level weather: Rain time: 0 (now: false), thunder time: 0 (now: false)
+	Level game mode: Game mode: survival (ID 0). Hardcore: false. Cheats: false
+	Forced entities: 15 total; [EntityPlayerSP['RealDiZi'/599022, l='MpServer', x=283.89, y=62.00, z=182.76], FakePlayer['tzi_WIB3X_11_03'/-1, l='MpServer', x=269.85, y=81.05, z=175.50], FakePlayer['Cute_N_eko'/-2, l='MpServer', x=0.16, y=0.00, z=-0.22], EntityOtherPlayerMP['tzi_WIB3X_11_03'/598540, l='MpServer', x=269.85, y=81.05, z=175.50], FakePlayer['RealDiZi'/-3, l='MpServer', x=283.89, y=62.00, z=182.76], EntityArmorStand['§6Scaffold'/260, l='MpServer', x=239.50, y=65.66, z=164.50], EntityOtherPlayerMP['tzi_WIB3X_11_03'/598540, l='MpServer', x=269.85, y=81.05, z=175.50], EntityOtherPlayerMP['Cute_N_eko'/592914, l='MpServer', x=244.13, y=62.00, z=181.00], EntityOtherPlayerMP['DSJ_'/598495, l='MpServer', x=247.25, y=62.00, z=182.13], FakePlayer['tzi_WIB3X_11_03'/-1, l='MpServer', x=269.85, y=81.05, z=175.50], FakePlayer['Cute_N_eko'/-2, l='MpServer', x=0.16, y=0.00, z=-0.22], FakePlayer['RealDiZi'/-3, l='MpServer', x=283.89, y=62.00, z=182.76], EntityArmorStand['§6TerrainSpeed'/310, l='MpServer', x=250.50, y=65.66, z=160.50], EntityOtherPlayerMP['DSJ_'/598495, l='MpServer', x=247.25, y=62.00, z=182.13], EntityOtherPlayerMP['Cute_N_eko'/592914, l='MpServer', x=244.13, y=62.00, z=181.00]]
+	Retry entities: 0 total; []
+	Server brand: DionaSpigot (Velocity)
+	Server type: Non-integrated multiplayer server
+Stacktrace:
+	at net.minecraft.client.multiplayer.WorldClient.addWorldInfoToCrashReport(WorldClient.java:523)
+	at net.minecraft.client.Minecraft.addGraphicsAndWorldToCrashReport(Minecraft.java:2707)
+	at net.minecraft.client.Minecraft.run(Minecraft.java:555)
+	at net.minecraft.client.main.Main.main(Main.java:111)
+	at Start.main(Start.java:39)
+
+-- System Details --
+Details:
+	Minecraft Version: 1.12.2
+	Operating System: Windows 11 (amd64) version 10.0
+	Java Version: 17.0.12, Oracle Corporation
+	Java VM Version: Java HotSpot(TM) 64-Bit Server VM (mixed mode, sharing), Oracle Corporation
+	Memory: 178173688 bytes (169 MB) / 520093696 bytes (496 MB) up to 4253024256 bytes (4056 MB)
+	JVM Flags: 0 total; 
+	IntCache: cache: 0, tcache: 0, allocated: 0, tallocated: 0
+	Launched Version: mcp
+	LWJGL: 3.3.3+5
+	OpenGL: NVIDIA GeForce RTX 3060/PCIe/SSE2 GL version 4.6.0 NVIDIA 576.52, NVIDIA Corporation
+	GL Caps: Using GL 1.3 multitexturing.
+Using GL 1.3 texture combiners.
+Using framebuffer objects because OpenGL 3.0 is supported and separate blending is supported.
+Shaders are available because OpenGL 2.1 is supported.
+VBOs are available because OpenGL 1.5 is supported.
+
+	Using VBOs: Yes
+	Is Modded: Definitely; Client brand changed to 'fml,forge'
+	Type: Client (map_client.txt)
+	Resource Packs: 单行道喜欢用的特殊音效材质包.zip
+	Current Language: English (US)
+	Profiler Position: N/A (disabled)
+	CPU: 12 x 12th Gen Intel(R) Core(TM) i5-12400F
+	OptiFine Version: OptiFine_1.12.2_HD_U_G6_pre1
+	OptiFine Build: ~~NULL~~
+	Render Distance Chunks: 8
+	Mipmaps: 4
+	Anisotropic Filtering: 1
+	Antialiasing: 0
+	Multitexture: false
+	Shaders: null
+	OpenGlVersion: 4.6.0 NVIDIA 576.52
+	OpenGlRenderer: NVIDIA GeForce RTX 3060/PCIe/SSE2
+	OpenGlVendor: NVIDIA Corporation
+	CpuCount: 12

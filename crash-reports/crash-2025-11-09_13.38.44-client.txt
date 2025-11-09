@@ -1,0 +1,89 @@
+---- Minecraft Crash Report ----
+// Quite honestly, I wouldn't worry myself about that.
+
+Time: 2025-11-09 13:38
+Description: Unexpected error
+
+java.lang.ClassCastException: class com.google.gson.internal.LazilyParsedNumber cannot be cast to class java.lang.Float (com.google.gson.internal.LazilyParsedNumber is in unnamed module of loader 'app'; java.lang.Float is in module java.base of loader 'bootstrap')
+	at dev.diona.southside.module.modules.player.Blink.onTick(Blink.java:145)
+	at me.bush.eventbus.handler.handlers.LambdaHandler.invoke(LambdaHandler.java:71)
+	at me.bush.eventbus.bus.EventBus.post(EventBus.java:141)
+	at net.minecraft.client.Minecraft.runTick(Minecraft.java:1839)
+	at net.minecraft.client.Minecraft.runGameLoop(Minecraft.java:1180)
+	at net.minecraft.client.Minecraft.run(Minecraft.java:536)
+	at net.minecraft.client.main.Main.main(Main.java:111)
+	at Start.main(Start.java:39)
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- Head --
+Thread: Client thread
+Stacktrace:
+	at dev.diona.southside.module.modules.player.Blink.onTick(Blink.java:145)
+	at me.bush.eventbus.handler.handlers.LambdaHandler.invoke(LambdaHandler.java:71)
+	at me.bush.eventbus.bus.EventBus.post(EventBus.java:141)
+
+-- Affected level --
+Details:
+	Level name: MpServer
+	All players: 7 total; [EntityPlayerSP['RealDiZi'/598907, l='MpServer', x=282.01, y=63.25, z=182.13], EntityOtherPlayerMP['DSJ_'/598495, l='MpServer', x=247.25, y=62.00, z=182.13], FakePlayer['DSJ_'/-3, l='MpServer', x=247.25, y=62.00, z=182.13], EntityOtherPlayerMP['Cute_N_eko'/592914, l='MpServer', x=242.00, y=62.00, z=175.24], FakePlayer['Cute_N_eko'/-30, l='MpServer', x=242.00, y=62.00, z=175.24], EntityOtherPlayerMP['tzi_WIB3X_11_03'/598540, l='MpServer', x=266.03, y=62.00, z=218.84], FakePlayer['RealDiZi'/-31, l='MpServer', x=282.01, y=63.25, z=182.13]]
+	Chunk stats: MultiplayerChunkCache: 441, 441
+	Level seed: 0
+	Level generator: ID 01 - flat, ver 0. Features enabled: false
+	Level generator options: 
+	Level spawn location: World: (211,61,176), Chunk: (at 3,3,0 in 13,11; contains blocks 208,0,176 to 223,255,191), Region: (0,0; contains chunks 0,0 to 31,31, blocks 0,0,0 to 511,255,511)
+	Level time: 42602 game time, 1000 day time
+	Level dimension: 0
+	Level storage version: 0x00000 - Unknown?
+	Level weather: Rain time: 0 (now: false), thunder time: 0 (now: false)
+	Level game mode: Game mode: survival (ID 0). Hardcore: false. Cheats: false
+	Forced entities: 58 total; [EntityPlayerSP['RealDiZi'/598907, l='MpServer', x=282.01, y=63.25, z=182.13], FakePlayer['DSJ_'/-3, l='MpServer', x=247.25, y=62.00, z=182.13], EntityOtherPlayerMP['DSJ_'/598495, l='MpServer', x=247.25, y=62.00, z=182.13], EntityArmorStand['§6Scaffold'/260, l='MpServer', x=239.50, y=65.66, z=164.50], EntityOtherPlayerMP['tzi_WIB3X_11_03'/598540, l='MpServer', x=215.84, y=61.00, z=162.66], EntityOtherPlayerMP['H1d3n_'/598136, l='MpServer', x=250.71, y=62.00, z=216.71], EntityOtherPlayerMP['tzi_WIB3X_11_03'/598540, l='MpServer', x=266.03, y=62.00, z=218.84], FakePlayer['tzi_WIB3X_11_03'/-1, l='MpServer', x=215.84, y=61.00, z=162.66], FakePlayer['H1d3n_'/-2, l='MpServer', x=250.71, y=62.00, z=216.71], FakePlayer['DSJ_'/-3, l='MpServer', x=247.25, y=62.00, z=182.13], EntityOtherPlayerMP['yokllone234'/598508, l='MpServer', x=219.04, y=61.65, z=185.28], FakePlayer['yokllone234'/-4, l='MpServer', x=219.04, y=61.65, z=185.28], FakePlayer['RealDiZi'/-5, l='MpServer', x=272.65, y=62.39, z=167.12], EntityOtherPlayerMP['yokllone234'/598508, l='MpServer', x=225.99, y=61.36, z=189.90], FakePlayer['yokllone234'/-6, l='MpServer', x=225.99, y=61.36, z=189.90], EntityOtherPlayerMP['H1d3n_'/598136, l='MpServer', x=232.52, y=62.64, z=197.58], FakePlayer['H1d3n_'/-7, l='MpServer', x=232.52, y=62.64, z=197.58], FakePlayer['RealDiZi'/-8, l='MpServer', x=278.72, y=63.25, z=163.41], EntityOtherPlayerMP['H1d3n_'/598136, l='MpServer', x=224.58, y=62.61, z=198.62], FakePlayer['H1d3n_'/-9, l='MpServer', x=224.58, y=62.61, z=198.62], FakePlayer['RealDiZi'/-10, l='MpServer', x=273.16, y=62.00, z=162.11], EntityOtherPlayerMP['Cute_N_eko'/592914, l='MpServer', x=242.00, y=62.00, z=175.24], FakePlayer['Cute_N_eko'/-30, l='MpServer', x=242.00, y=62.00, z=175.24], EntityOtherPlayerMP['yokllone234'/598508, l='MpServer', x=217.50, y=61.43, z=179.50], FakePlayer['RealDiZi'/-31, l='MpServer', x=282.01, y=63.25, z=182.13], FakePlayer['RealDiZi'/-11, l='MpServer', x=262.28, y=62.00, z=166.19], FakePlayer['RealDiZi'/-12, l='MpServer', x=261.42, y=62.00, z=165.16], EntityOtherPlayerMP['§b传送到latest服务器'/220, l='MpServer', x=213.69, y=61.00, z=165.47], FakePlayer['§b传送到latest服务器'/-13, l='MpServer', x=213.69, y=61.00, z=165.47], FakePlayer['yokllone234'/-14, l='MpServer', x=218.28, y=61.00, z=178.16], FakePlayer['RealDiZi'/-15, l='MpServer', x=259.16, y=62.00, z=164.08], EntityOtherPlayerMP['NARCISSIST2009'/598217, l='MpServer', x=210.63, y=62.00, z=169.97], FakePlayer['RealDiZi'/-16, l='MpServer', x=254.09, y=62.00, z=162.47], FakePlayer['NARCISSIST2009'/-17, l='MpServer', x=210.63, y=62.00, z=169.97], FakePlayer['RealDiZi'/-18, l='MpServer', x=244.02, y=62.00, z=161.66], EntityOtherPlayerMP['C3aE'/598225, l='MpServer', x=198.19, y=62.00, z=162.00], EntityArmorStand['§6TerrainSpeed'/310, l='MpServer', x=250.50, y=65.66, z=160.50], FakePlayer['C3aE'/-19, l='MpServer', x=198.19, y=62.00, z=162.00], EntityOtherPlayerMP['H1d3n_'/598136, l='MpServer', x=211.50, y=61.00, z=162.50], FakePlayer['H1d3n_'/-20, l='MpServer', x=211.50, y=61.00, z=162.50], FakePlayer['RealDiZi'/-21, l='MpServer', x=247.03, y=62.00, z=165.67], EntityOtherPlayerMP['H1d3n_'/598136, l='MpServer', x=211.50, y=61.00, z=162.50], FakePlayer['H1d3n_'/-22, l='MpServer', x=211.50, y=61.00, z=162.50], FakePlayer['RealDiZi'/-23, l='MpServer', x=257.41, y=62.00, z=165.74], FakePlayer['RealDiZi'/-24, l='MpServer', x=264.30, y=62.00, z=166.52], FakePlayer['RealDiZi'/-25, l='MpServer', x=272.53, y=62.00, z=169.36], FakePlayer['RealDiZi'/-26, l='MpServer', x=277.30, y=62.00, z=171.01], EntityOtherPlayerMP['H1d3n_'/598136, l='MpServer', x=232.14, y=62.66, z=204.74], FakePlayer['H1d3n_'/-27, l='MpServer', x=232.14, y=62.66, z=204.74], EntityOtherPlayerMP['yokllone234'/598508, l='MpServer', x=246.69, y=62.00, z=199.91], FakePlayer['yokllone234'/-28, l='MpServer', x=246.69, y=62.00, z=199.91], EntityOtherPlayerMP['tzi_WIB3X_11_03'/598540, l='MpServer', x=264.63, y=76.60, z=220.43], FakePlayer['tzi_WIB3X_11_03'/-29, l='MpServer', x=264.63, y=76.60, z=220.43], EntityOtherPlayerMP['Cute_N_eko'/592914, l='MpServer', x=242.00, y=62.00, z=175.24], FakePlayer['Cute_N_eko'/-30, l='MpServer', x=242.00, y=62.00, z=175.24], EntityOtherPlayerMP['tzi_WIB3X_11_03'/598540, l='MpServer', x=266.03, y=62.00, z=218.84], FakePlayer['RealDiZi'/-31, l='MpServer', x=282.01, y=63.25, z=182.13], EntityOtherPlayerMP['DSJ_'/598495, l='MpServer', x=247.25, y=62.00, z=182.13]]
+	Retry entities: 0 total; []
+	Server brand: DionaSpigot (Velocity)
+	Server type: Non-integrated multiplayer server
+Stacktrace:
+	at net.minecraft.client.multiplayer.WorldClient.addWorldInfoToCrashReport(WorldClient.java:523)
+	at net.minecraft.client.Minecraft.addGraphicsAndWorldToCrashReport(Minecraft.java:2707)
+	at net.minecraft.client.Minecraft.run(Minecraft.java:555)
+	at net.minecraft.client.main.Main.main(Main.java:111)
+	at Start.main(Start.java:39)
+
+-- System Details --
+Details:
+	Minecraft Version: 1.12.2
+	Operating System: Windows 11 (amd64) version 10.0
+	Java Version: 17.0.12, Oracle Corporation
+	Java VM Version: Java HotSpot(TM) 64-Bit Server VM (mixed mode, sharing), Oracle Corporation
+	Memory: 429288112 bytes (409 MB) / 717225984 bytes (684 MB) up to 4253024256 bytes (4056 MB)
+	JVM Flags: 0 total; 
+	IntCache: cache: 0, tcache: 0, allocated: 0, tallocated: 0
+	Launched Version: mcp
+	LWJGL: 3.3.3+5
+	OpenGL: NVIDIA GeForce RTX 3060/PCIe/SSE2 GL version 4.6.0 NVIDIA 576.52, NVIDIA Corporation
+	GL Caps: Using GL 1.3 multitexturing.
+Using GL 1.3 texture combiners.
+Using framebuffer objects because OpenGL 3.0 is supported and separate blending is supported.
+Shaders are available because OpenGL 2.1 is supported.
+VBOs are available because OpenGL 1.5 is supported.
+
+	Using VBOs: Yes
+	Is Modded: Definitely; Client brand changed to 'fml,forge'
+	Type: Client (map_client.txt)
+	Resource Packs: 单行道喜欢用的特殊音效材质包.zip
+	Current Language: English (US)
+	Profiler Position: N/A (disabled)
+	CPU: 12 x 12th Gen Intel(R) Core(TM) i5-12400F
+	OptiFine Version: OptiFine_1.12.2_HD_U_G6_pre1
+	OptiFine Build: ~~NULL~~
+	Render Distance Chunks: 8
+	Mipmaps: 4
+	Anisotropic Filtering: 1
+	Antialiasing: 0
+	Multitexture: false
+	Shaders: null
+	OpenGlVersion: 4.6.0 NVIDIA 576.52
+	OpenGlRenderer: NVIDIA GeForce RTX 3060/PCIe/SSE2
+	OpenGlVendor: NVIDIA Corporation
+	CpuCount: 12

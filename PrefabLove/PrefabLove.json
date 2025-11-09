@@ -1,0 +1,11 @@
+{
+  "metadata": {
+    "version": "B1",
+    "create": "2025-11-09 05:44:23",
+    "modify": "2025-11-09 05:44:23"
+  },
+  "data": {
+    "config": "default",
+    "commandPrefix": "."
+  }
+}

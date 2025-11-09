@@ -1,0 +1,27 @@
+{
+  "Island": {
+    "Shadow": true,
+    "Background Alpha": 60,
+    "Animation Speed": 3,
+    "Toggle Ball Speed": 2,
+    "Toggle BG Speed": 20,
+    "Scaffold Bar Speed": 5,
+    "Blur Strength": 5,
+    "Locked": false,
+    "HUD Position": {
+      "anchor": "1",
+      "x": 0.0,
+      "y": 40.0
+    },
+    "Scale": 1.0,
+    "Show in Chat": true,
+    "Show in F3 (Debug)": false,
+    "Show in GUIs": true
+  },
+  "Bind": {
+    "keyBinds": [
+      0
+    ]
+  },
+  "Enabled": true
+}

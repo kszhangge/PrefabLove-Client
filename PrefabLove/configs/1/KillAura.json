@@ -1,0 +1,30 @@
+{
+  "Mode": 1,
+  "Switch Delay": 0,
+  "CPS Mode": 1,
+  "Priority": 0,
+  "Min CPS": 8,
+  "Max CPS": 12,
+  "Min Range": 3,
+  "Max Range": 3,
+  "Wall Range": 3,
+  "Auto Block": 2,
+  "ThePit Fix": false,
+  "Block Range": 5,
+  "Discover Range": 5,
+  "Rotation Mode": 0,
+  "Min Rotation Speed": 180,
+  "Max Rotation Speed": 180,
+  "Attack When Using": false,
+  "Respawn Cooldown": 10,
+  "Silent Rotation": true,
+  "Auto Disable": false,
+  "Sprint": true,
+  "Multi Raycast": true,
+  "Bind": {
+    "keyBinds": [
+      19
+    ]
+  },
+  "Enabled": false
+}
