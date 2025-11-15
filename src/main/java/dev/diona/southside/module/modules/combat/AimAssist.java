@@ -1,17 +1,21 @@
 package dev.diona.southside.module.modules.combat;
 
+import cc.polyfrost.oneconfig.config.options.impl.Slider;
 import dev.diona.southside.event.events.StrafeEvent;
 import dev.diona.southside.module.Category;
 import dev.diona.southside.module.Module;
+import dev.diona.southside.module.modules.client.Target;
 import dev.diona.southside.util.player.Rotation;
 import dev.diona.southside.util.player.RotationUtil;
-import cc.polyfrost.oneconfig.config.options.*;
+import me.bush.eventbus.annotation.EventListener;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 public class AimAssist extends Module {
     public final Slider rangeValue = new Slider("Range", 4, 1, 8, 0.1);
@@ -98,13 +102,13 @@ public class AimAssist extends Module {
     private boolean isValidTarget(Entity entity) {
         if (entity == mc.player || !(entity instanceof EntityLivingBase)) return false;
         if (!Target.isTarget(entity) || !entity.isEntityAlive()) return false;
-        if (mc.player.getDistanceToEntity(entity) > rangeValue.getValue().doubleValue()) return false;
+        if (mc.player.getDistance(entity) > rangeValue.getValue().doubleValue()) return false;
         if (checkVisible.isEnabled() && !mc.player.canEntityBeSeen(entity)) return false;
         return RotationUtil.getRotationDifference(entity) <= fovValue.getValue().doubleValue();
     }
 
     private double calculateTargetScore(Entity entity, double range, double maxFov) {
-        double distance = mc.player.getDistanceToEntity(entity);
+        double distance = mc.player.getDistance(entity);
         double rotationDiff = RotationUtil.getRotationDifference(entity);
         double score = (distance / range) * 0.6 + (rotationDiff / maxFov) * 0.4;
         if (useNeuralNetwork.isEnabled() && targetPatterns.containsKey(entity)) {
@@ -127,8 +131,8 @@ public class AimAssist extends Module {
         TargetPattern pattern = targetPatterns.get(target);
         float[] prediction = pattern.predictNextPosition();
         float confidence = pattern.getPredictionConfidence();
-        float predictedYaw = rotation.getYaw() + prediction[0] * confidence;
-        float predictedPitch = MathHelper.clamp_float(rotation.getPitch() + prediction[1] * confidence, -90, 90);
+        float predictedYaw = rotation.yaw + prediction[0] * confidence;
+        float predictedPitch = MathHelper.clamp(rotation.pitch + prediction[1] * confidence, -90, 90);
         return new Rotation(predictedYaw, predictedPitch);
     }
 
@@ -141,15 +145,15 @@ public class AimAssist extends Module {
 
         double amplitude = noise1Value.getValue().doubleValue();
         double frequency = noise2Value.getValue().doubleValue();
-        double smoothness = MathHelper.clamp_double(smoothnessValue.getValue().doubleValue(), 0.1, 1.0);
+        double smoothness = MathHelper.clamp(smoothnessValue.getValue().doubleValue(), 0.1, 1.0);
 
         double yawNoise = generateImprovedNoise(timeCounter * frequency, 0) * amplitude;
         double pitchNoise = generateImprovedNoise(0, timeCounter * frequency) * amplitude * 0.5;
         yawNoise *= smoothness;
         pitchNoise *= smoothness;
 
-        float newYaw = (float) (rotation.getYaw() + yawNoise);
-        float newPitch = (float) MathHelper.clamp_double(rotation.getPitch() + pitchNoise, -90, 90);
+        float newYaw = (float) (rotation.yaw + yawNoise);
+        float newPitch = (float) MathHelper.clamp(rotation.pitch + pitchNoise, -90, 90);
         return new Rotation(newYaw, newPitch);
     }
 
@@ -158,8 +162,8 @@ public class AimAssist extends Module {
         EntityPlayerSP player = mc.player;
         if (player == null) return null;
 
-        float deltaYaw = MathHelper.wrapAngleTo180_float(rotation.getYaw() - lastAimAngles[0]);
-        float deltaPitch = rotation.getPitch() - lastAimAngles[1];
+        float deltaYaw = MathHelper.wrapDegrees(rotation.yaw - lastAimAngles[0]);
+        float deltaPitch = rotation.pitch - lastAimAngles[1];
         float maxChange = (float) maxAngleChange.getValue().doubleValue();
 
         if (Math.abs(deltaYaw) > maxChange || Math.abs(deltaPitch) > maxChange) {
@@ -199,8 +203,8 @@ public class AimAssist extends Module {
 
     private void updateSafetyTracking(Rotation rotation) {
         lastAimTime = System.currentTimeMillis();
-        lastAimAngles[0] = rotation.getYaw();
-        lastAimAngles[1] = rotation.getPitch();
+        lastAimAngles[0] = rotation.yaw;
+        lastAimAngles[1] = rotation.pitch;
     }
 
     private void resetTracking() {
