@@ -1,6 +1,7 @@
 package dev.diona.southside.module.modules.combat;
 
 import cc.polyfrost.oneconfig.config.options.*;
+import cc.polyfrost.oneconfig.config.options.impl.Slider;
 import dev.diona.southside.event.events.StrafeEvent;
 import dev.diona.southside.module.Category;
 import dev.diona.southside.module.Module;
@@ -13,7 +14,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.MathHelper;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 public class AimAssist extends Module {
     public final Slider rangeValue = new Slider("Range", 4, 1, 8, 0.1);
