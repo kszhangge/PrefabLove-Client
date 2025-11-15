@@ -24,6 +24,9 @@ public class AimAssist extends Module {
     public final Slider noise3Value = new Slider("Noise Randomness", 0.3, 0, 1, 0.1);
     public final Slider noise4Value = new Slider("Noise Smoothing", 0.7, 0.1, 2.0, 0.1);
     public final Slider noise5Value = new Slider("Noise Offset", 0.2, 0, 1, 0.05);
+    public final Slider noise6Value = new Slider("Noise Pattern", 0.4, 0, 1, 0.05);
+    public final Slider noise7Value = new Slider("Noise Variation", 0.6, 0, 1, 0.05);
+    public final Slider noise8Value = new Slider("Noise Phase", 0.3, 0, 1, 0.05);
     public final Slider smoothnessValue = new Slider("Smoothness", 0.3, 0.1, 1.0, 0.1);
     public final Checkbox safetyCheck = new Checkbox("Safety Check", true);
     public final Checkbox onlyWhenAttacking = new Checkbox("Only When Attacking", true);
@@ -38,6 +41,16 @@ public class AimAssist extends Module {
     public final Checkbox dynamicSmoothing = new Checkbox("Dynamic Smoothing", true);
     public final Checkbox predictionBypass = new Checkbox("Prediction Bypass", true);
     public final Slider bypassStrength = new Slider("Bypass Strength", 0.3, 0.1, 1.0, 0.1);
+    public final Checkbox advancedBypass = new Checkbox("Advanced Bypass", true);
+    public final Slider bypassPattern = new Slider("Bypass Pattern", 0.5, 0.1, 2.0, 0.1);
+    public final Checkbox serverSync = new Checkbox("Server Sync", true);
+    public final Slider syncTolerance = new Slider("Sync Tolerance", 2.0, 0.5, 5.0, 0.1);
+    public final Checkbox adaptiveMode = new Checkbox("Adaptive Mode", true);
+    public final Slider adaptSpeed = new Slider("Adapt Speed", 0.7, 0.1, 2.0, 0.1);
+    public final Checkbox microAdjustments = new Checkbox("Micro Adjustments", true);
+    public final Slider microStrength = new Slider("Micro Strength", 0.2, 0.05, 0.5, 0.05);
+    public final Checkbox aimStabilization = new Checkbox("Aim Stabilization", true);
+    public final Slider stabilizationStrength = new Slider("Stabilization", 0.4, 0.1, 1.0, 0.05);
 
     private final Random random = new Random();
     private long lastUpdateTime = 0;
@@ -51,31 +64,57 @@ public class AimAssist extends Module {
     private int suspiciousBehaviorCount = 0;
     private long lastReactionTime = 0;
     private boolean reactionTriggered = false;
-    private float[] humanAimPattern = new float[10];
+    private float[] humanAimPattern = new float[15];
     private int aimPatternIndex = 0;
     private double consistencyFactor = 1.0;
     private long lastConsistencyUpdate = 0;
     private int bypassCounter = 0;
     private float lastServerYaw = 0;
     private float lastServerPitch = 0;
+    private int noAimCounter = 0;
+    private int patternCycle = 0;
+    private double phaseOffset = 0;
+    private double adaptiveFactor = 1.0;
+    private long lastAdaptiveUpdate = 0;
+    private float[] stabilizationBuffer = new float[5];
+    private int stabilizationIndex = 0;
+    private int serverDesyncCount = 0;
+    private long lastServerCheck = 0;
 
     private static final int MAX_SUSPICIOUS_COUNT = 3;
-    private static final long MIN_AIM_INTERVAL = 8;
+    private static final long MIN_AIM_INTERVAL = 6;
     private static final int MAX_HISTORY_SIZE = 20;
-    private static final int TARGET_PERSISTENCE_TIME = 8;
+    private static final int TARGET_PERSISTENCE_TIME = 10;
     private static final float MIN_PITCH = -90.0f;
     private static final float MAX_PITCH = 90.0f;
-    private static final int HUMAN_PATTERN_SIZE = 10;
-    private static final double BYPASS_CYCLE = 37;
+    private static final int HUMAN_PATTERN_SIZE = 15;
+    private static final double BYPASS_CYCLE = 41;
+    private static final int STABILIZATION_BUFFER_SIZE = 5;
+    private static final int MAX_SERVER_DESYNC = 5;
     
     private double noiseOffsetX = 0;
     private double noiseOffsetY = 0;
+    private double noiseOffsetZ = 0;
 
     public AimAssist(String name, String description, Category category, boolean visible) {
         super(name, description, category, visible);
         noiseOffsetX = random.nextDouble() * 1000;
         noiseOffsetY = random.nextDouble() * 1000;
+        noiseOffsetZ = random.nextDouble() * 1000;
         initializeHumanPattern();
+        initializeStabilizationBuffer();
+    }
+
+    private void initializeHumanPattern() {
+        for (int i = 0; i < HUMAN_PATTERN_SIZE; i++) {
+            humanAimPattern[i] = (random.nextFloat() - 0.5f) * 0.3f;
+        }
+    }
+
+    private void initializeStabilizationBuffer() {
+        for (int i = 0; i < STABILIZATION_BUFFER_SIZE; i++) {
+            stabilizationBuffer[i] = 0;
+        }
     }
 
     @EventListener
@@ -88,8 +127,12 @@ public class AimAssist extends Module {
         
         updateConsistencyFactor();
         updateBypassCounter();
+        updateAdaptiveFactor();
+        updatePatternCycle();
+        checkServerSync();
         
         if (!shouldAimThisTick()) {
+            noAimCounter++;
             return;
         }
         
@@ -113,15 +156,53 @@ public class AimAssist extends Module {
         Rotation humanizedRotation = applyHumanBehavior(safeRotation);
         if (humanizedRotation == null) return;
 
-        if (applyValidRotation(humanizedRotation)) {
-            updateSafetyTracking(humanizedRotation);
-            updateHumanPattern(humanizedRotation);
+        Rotation stabilizedRotation = applyStabilization(humanizedRotation);
+        if (stabilizedRotation == null) return;
+
+        if (applyValidRotation(stabilizedRotation)) {
+            updateSafetyTracking(stabilizedRotation);
+            updateHumanPattern(stabilizedRotation);
+            updateStabilizationBuffer(stabilizedRotation);
+            noAimCounter = 0;
         }
     }
 
-    private void initializeHumanPattern() {
-        for (int i = 0; i < HUMAN_PATTERN_SIZE; i++) {
-            humanAimPattern[i] = (random.nextFloat() - 0.5f) * 0.2f;
+    private void updatePatternCycle() {
+        patternCycle++;
+        if (patternCycle > 1000) patternCycle = 0;
+        
+        phaseOffset = Math.sin(patternCycle * 0.01) * noise8Value.getValue().doubleValue();
+    }
+
+    private void updateAdaptiveFactor() {
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastAdaptiveUpdate > 2000) {
+            if (adaptiveMode.isEnabled()) {
+                adaptiveFactor = 0.8 + (random.nextDouble() * 0.4);
+                adaptiveFactor *= adaptSpeed.getValue().doubleValue();
+            } else {
+                adaptiveFactor = 1.0;
+            }
+            lastAdaptiveUpdate = currentTime;
+        }
+    }
+
+    private void checkServerSync() {
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastServerCheck > 100) {
+            float currentYaw = mc.player.rotationYaw;
+            float currentPitch = mc.player.rotationPitch;
+            
+            float deltaYaw = Math.abs(MathHelper.wrapDegrees(currentYaw - lastServerYaw));
+            float deltaPitch = Math.abs(currentPitch - lastServerPitch);
+            
+            if (deltaYaw > syncTolerance.getValue().doubleValue() || deltaPitch > syncTolerance.getValue().doubleValue()) {
+                serverDesyncCount++;
+            } else {
+                serverDesyncCount = Math.max(0, serverDesyncCount - 1);
+            }
+            
+            lastServerCheck = currentTime;
         }
     }
 
@@ -143,7 +224,16 @@ public class AimAssist extends Module {
         aimPatternIndex++;
     }
 
+    private void updateStabilizationBuffer(Rotation rotation) {
+        stabilizationBuffer[stabilizationIndex] = rotation.yaw;
+        stabilizationIndex = (stabilizationIndex + 1) % STABILIZATION_BUFFER_SIZE;
+    }
+
     private boolean shouldAimThisTick() {
+        if (serverDesyncCount > MAX_SERVER_DESYNC && serverSync.isEnabled()) {
+            return false;
+        }
+        
         long currentTime = System.currentTimeMillis();
         
         if (!reactionTriggered) {
@@ -156,14 +246,24 @@ public class AimAssist extends Module {
         }
         
         double consistency = aimConsistency.getValue().doubleValue();
-        if (random.nextDouble() > consistency * consistencyFactor) {
+        if (random.nextDouble() > consistency * consistencyFactor * adaptiveFactor) {
             return false;
+        }
+        
+        if (noAimCounter < 3) {
+            return true;
         }
         
         if (predictionBypass.isEnabled()) {
             double bypassPhase = (bypassCounter % BYPASS_CYCLE) / BYPASS_CYCLE;
             double bypassValue = Math.sin(bypassPhase * Math.PI * 2) * bypassStrength.getValue().doubleValue();
-            if (bypassValue < -0.2 && random.nextDouble() < 0.3) {
+            
+            if (advancedBypass.isEnabled()) {
+                double patternValue = Math.sin(patternCycle * bypassPattern.getValue().doubleValue()) * 0.3;
+                bypassValue += patternValue;
+            }
+            
+            if (bypassValue < -0.3 && random.nextDouble() < 0.4) {
                 return false;
             }
         }
@@ -173,8 +273,8 @@ public class AimAssist extends Module {
 
     private void updateConsistencyFactor() {
         long currentTime = System.currentTimeMillis();
-        if (currentTime - lastConsistencyUpdate > 1000) {
-            consistencyFactor = 0.7 + (random.nextDouble() * 0.3);
+        if (currentTime - lastConsistencyUpdate > 800) {
+            consistencyFactor = 0.7 + (random.nextDouble() * 0.4);
             lastConsistencyUpdate = currentTime;
         }
     }
@@ -219,7 +319,7 @@ public class AimAssist extends Module {
         
         if (Math.abs(serverYaw - lastServerYaw) > 45 || Math.abs(serverPitch - lastServerPitch) > 25) {
             suspiciousBehaviorCount++;
-            if (suspiciousBehaviorCount > MAX_SUSPICIOUS_COUNT * 2) {
+            if (suspiciousBehaviorCount > MAX_SUSPICIOUS_COUNT * 3) {
                 return false;
             }
         }
@@ -279,11 +379,11 @@ public class AimAssist extends Module {
         }
         
         if (entity == currentTarget) {
-            score *= 0.7;
+            score *= 0.6;
         }
         
         if (predictionBypass.isEnabled()) {
-            double randomFactor = 0.9 + (random.nextDouble() * 0.2);
+            double randomFactor = 0.8 + (random.nextDouble() * 0.4);
             score *= randomFactor;
         }
         
@@ -318,16 +418,18 @@ public class AimAssist extends Module {
                 patternVariation += humanAimPattern[i];
             }
             patternVariation /= HUMAN_PATTERN_SIZE;
-            base += patternVariation * 0.3;
+            base += patternVariation * 0.4;
         }
         
         double bypassEffect = 1.0;
         if (predictionBypass.isEnabled()) {
-            double bypassPhase = (bypassCounter % 23) / 23.0;
-            bypassEffect = 0.8 + (Math.sin(bypassPhase * Math.PI * 2) * 0.2);
+            double bypassPhase = (bypassCounter % 29) / 29.0;
+            bypassEffect = 0.7 + (Math.sin(bypassPhase * Math.PI * 2) * 0.3);
         }
         
-        return MathHelper.clamp(base * bypassEffect, 0.5, 1.5);
+        double adaptiveEffect = adaptiveMode.isEnabled() ? adaptiveFactor : 1.0;
+        
+        return MathHelper.clamp(base * bypassEffect * adaptiveEffect, 0.4, 1.8);
     }
 
     private Rotation applyNeuralPrediction(Rotation rotation, Entity target) {
@@ -355,19 +457,21 @@ public class AimAssist extends Module {
         double randomness = noise3Value.getValue().doubleValue();
         double smoothing = noise4Value.getValue().doubleValue();
         double offset = noise5Value.getValue().doubleValue();
+        double pattern = noise6Value.getValue().doubleValue();
+        double variation = noise7Value.getValue().doubleValue();
         double smoothness = MathHelper.clamp(smoothnessValue.getValue().doubleValue(), 0.1, 1.0);
 
-        double timeWithOffset = timeCounter + offset;
-        double yawNoise = generateAdvancedNoise(timeWithOffset * frequency + noiseOffsetX, noiseOffsetY, randomness, smoothing) * amplitude * smoothness;
-        double pitchNoise = generateAdvancedNoise(noiseOffsetX, timeWithOffset * frequency + noiseOffsetY, randomness, smoothing) * amplitude * 0.5 * smoothness;
+        double timeWithOffset = timeCounter + offset + phaseOffset;
+        double yawNoise = generateAdvancedNoise(timeWithOffset * frequency + noiseOffsetX, noiseOffsetY, randomness, smoothing, pattern, variation) * amplitude * smoothness;
+        double pitchNoise = generateAdvancedNoise(noiseOffsetX, timeWithOffset * frequency + noiseOffsetY, randomness, smoothing, pattern, variation) * amplitude * 0.5 * smoothness;
 
         double humanPatternNoise = 0.0;
         if (aimPatternIndex > 0) {
-            humanPatternNoise = humanAimPattern[aimPatternIndex % HUMAN_PATTERN_SIZE] * 0.1;
+            humanPatternNoise = humanAimPattern[aimPatternIndex % HUMAN_PATTERN_SIZE] * 0.2;
         }
 
-        yawNoise = MathHelper.clamp(yawNoise + humanPatternNoise, -6.0, 6.0);
-        pitchNoise = MathHelper.clamp(pitchNoise + humanPatternNoise * 0.5, -3.0, 3.0);
+        yawNoise = MathHelper.clamp(yawNoise + humanPatternNoise, -8.0, 8.0);
+        pitchNoise = MathHelper.clamp(pitchNoise + humanPatternNoise * 0.5, -4.0, 4.0);
 
         float newYaw = (float) (rotation.yaw + yawNoise);
         float newPitch = (float) (rotation.pitch + pitchNoise);
@@ -381,24 +485,52 @@ public class AimAssist extends Module {
         float currentYaw = rotation.yaw;
         float currentPitch = rotation.pitch;
         
-        double microShake = (random.nextDouble() - 0.5) * 0.3;
-        double focusDrift = Math.sin(System.currentTimeMillis() * 0.001) * 0.1;
+        double microShake = (random.nextDouble() - 0.5) * 0.4;
+        double focusDrift = Math.sin(System.currentTimeMillis() * 0.001) * 0.15;
         
         float humanYaw = currentYaw + (float)(microShake + focusDrift);
         float humanPitch = currentPitch + (float)(microShake * 0.5);
         
+        if (microAdjustments.isEnabled()) {
+            double microAdjust = Math.sin(patternCycle * 0.05) * microStrength.getValue().doubleValue();
+            humanYaw += (float)microAdjust;
+            humanPitch += (float)(microAdjust * 0.3);
+        }
+        
         if (predictionBypass.isEnabled()) {
-            double bypassPattern = Math.sin(bypassCounter * 0.1) * 0.2;
+            double bypassPattern = Math.sin(bypassCounter * 0.08) * 0.3;
             humanYaw += (float)bypassPattern;
         }
         
         return normalizeRotation(new Rotation(humanYaw, humanPitch));
     }
 
-    private double generateAdvancedNoise(double x, double y, double randomness, double smoothing) {
+    private Rotation applyStabilization(Rotation rotation) {
+        if (!aimStabilization.isEnabled() || rotation == null) return rotation;
+        
+        float stabilizedYaw = rotation.yaw;
+        float stabilizedPitch = rotation.pitch;
+        
+        if (stabilizationIndex > 0) {
+            float avgYaw = 0;
+            for (int i = 0; i < STABILIZATION_BUFFER_SIZE; i++) {
+                avgYaw += stabilizationBuffer[i];
+            }
+            avgYaw /= STABILIZATION_BUFFER_SIZE;
+            
+            float stabilization = (float) stabilizationStrength.getValue().doubleValue();
+            stabilizedYaw = rotation.yaw * (1 - stabilization) + avgYaw * stabilization;
+        }
+        
+        return new Rotation(stabilizedYaw, stabilizedPitch);
+    }
+
+    private double generateAdvancedNoise(double x, double y, double randomness, double smoothing, double pattern, double variation) {
         double baseNoise = generateImprovedNoise(x, y);
         double randomComponent = (random.nextDouble() - 0.5) * 2.0 * randomness;
-        double combined = (baseNoise * (1.0 - randomness)) + (randomComponent * randomness);
+        double patternNoise = Math.sin(x * pattern) * variation;
+        
+        double combined = (baseNoise * (1.0 - randomness)) + (randomComponent * randomness) + (patternNoise * 0.3);
         
         double smoothed = smoothNoise(combined, smoothing);
         return MathHelper.clamp(smoothed, -1.0, 1.0);
@@ -446,9 +578,9 @@ public class AimAssist extends Module {
         float deltaYaw = Math.abs(MathHelper.wrapDegrees(yaw - lastServerYaw));
         float deltaPitch = Math.abs(pitch - lastServerPitch);
         
-        if (deltaYaw > 60 || deltaPitch > 35) {
+        if (deltaYaw > 50 || deltaPitch > 30) {
             suspiciousBehaviorCount++;
-            return suspiciousBehaviorCount <= MAX_SUSPICIOUS_COUNT;
+            return suspiciousBehaviorCount <= MAX_SUSPICIOUS_COUNT * 2;
         }
         
         return true;
@@ -464,8 +596,8 @@ public class AimAssist extends Module {
         float smoothness = (float) smoothnessValue.getValue().doubleValue();
         
         if (dynamicSmoothing.isEnabled()) {
-            float distance = mc.player.getDistance(currentTarget);
-            smoothness *= MathHelper.clamp((float)distance / 4.0f, 0.5f, 1.5f);
+            float distance = currentTarget != null ? mc.player.getDistance(currentTarget) : 3.0f;
+            smoothness *= MathHelper.clamp((float)distance / 3.0f, 0.4f, 1.6f);
         }
         
         smoothness = MathHelper.clamp(smoothness, 0.1f, 1.0f);
@@ -509,8 +641,8 @@ public class AimAssist extends Module {
         suspiciousBehaviorCount++;
         if (suspiciousBehaviorCount > MAX_SUSPICIOUS_COUNT) return null;
         
-        float limitedYaw = lastAimAngles[0] + Math.signum(deltaYaw) * maxChange * 0.3f;
-        float limitedPitch = lastAimAngles[1] + Math.signum(deltaPitch) * maxChange * 0.3f;
+        float limitedYaw = lastAimAngles[0] + Math.signum(deltaYaw) * maxChange * 0.2f;
+        float limitedPitch = lastAimAngles[1] + Math.signum(deltaPitch) * maxChange * 0.2f;
         
         return normalizeRotation(new Rotation(limitedYaw, limitedPitch));
     }
@@ -540,6 +672,7 @@ public class AimAssist extends Module {
         currentTarget = null;
         targetPersistence = 0;
         reactionTriggered = false;
+        serverDesyncCount = 0;
     }
 
     private double generateImprovedNoise(double x, double y) {
@@ -548,7 +681,7 @@ public class AimAssist extends Module {
         double frequency = 1.0;
         double maxAmplitude = 0.0;
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             noise += generatePerlinNoise(x * frequency, y * frequency) * amplitude;
             maxAmplitude += amplitude;
             amplitude *= 0.5;
