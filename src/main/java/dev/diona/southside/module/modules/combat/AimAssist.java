@@ -1,6 +1,6 @@
 package dev.diona.southside.module.modules.combat;
 
-import cc.polyfrost.oneconfig.config.options.impl.Slider;
+import cc.polyfrost.oneconfig.config.options.*;
 import dev.diona.southside.event.events.StrafeEvent;
 import dev.diona.southside.module.Category;
 import dev.diona.southside.module.Module;
@@ -13,9 +13,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.MathHelper;
 
-import java.awt.*;
 import java.util.*;
-import java.util.List;
 
 public class AimAssist extends Module {
     public final Slider rangeValue = new Slider("Range", 4, 1, 8, 0.1);
@@ -23,6 +21,9 @@ public class AimAssist extends Module {
     public final Slider speedValue = new Slider("Speed", 2, 1, 180, 1);
     public final Slider noise1Value = new Slider("Noise Amplitude", 0.5, 0, 2, 0.1);
     public final Slider noise2Value = new Slider("Noise Frequency", 1.0, 0.1, 5.0, 0.1);
+    public final Slider noise3Value = new Slider("Noise Randomness", 0.3, 0, 1, 0.1);
+    public final Slider noise4Value = new Slider("Noise Smoothing", 0.7, 0.1, 2.0, 0.1);
+    public final Slider noise5Value = new Slider("Noise Offset", 0.2, 0, 1, 0.05);
     public final Slider smoothnessValue = new Slider("Smoothness", 0.3, 0.1, 1.0, 0.1);
     public final Checkbox safetyCheck = new Checkbox("Safety Check", true);
     public final Checkbox onlyWhenAttacking = new Checkbox("Only When Attacking", true);
@@ -39,18 +40,28 @@ public class AimAssist extends Module {
     private Entity lastTarget = null;
     private int sameTargetCounter = 0;
     private final SimpleAimNeuralNetwork neuralNetwork = new SimpleAimNeuralNetwork();
-    private final Map<Entity, TargetPattern> targetPatterns = new HashMap<>();
+    private final Map<Integer, TargetPattern> targetPatterns = new HashMap<>();
     private long lastAimTime = 0;
     private float[] lastAimAngles = new float[2];
     private int suspiciousBehaviorCount = 0;
+    private static final int MAX_SUSPICIOUS_COUNT = 3;
+    private static final long MIN_AIM_INTERVAL = 50;
+    private static final int MAX_HISTORY_SIZE = 20;
+    private static final float MIN_PITCH = -90.0f;
+    private static final float MAX_PITCH = 90.0f;
+    private double noiseOffsetX = 0;
+    private double noiseOffsetY = 0;
 
     public AimAssist(String name, String description, Category category, boolean visible) {
         super(name, description, category, visible);
+        noiseOffsetX = random.nextDouble() * 1000;
+        noiseOffsetY = random.nextDouble() * 1000;
     }
 
     @EventListener
     public void onStrafe(StrafeEvent event) {
         if (!isSafeToAim()) return;
+        
         Entity target = findBestTarget();
         if (target == null) {
             resetTracking();
@@ -67,8 +78,9 @@ public class AimAssist extends Module {
         Rotation safeRotation = applySafetyChecks(targetRotation);
         if (safeRotation == null) return;
 
-        safeRotation.apply();
-        updateSafetyTracking(safeRotation);
+        if (applyValidRotation(safeRotation)) {
+            updateSafetyTracking(safeRotation);
+        }
     }
 
     private boolean isSafeToAim() {
@@ -76,8 +88,7 @@ public class AimAssist extends Module {
         if (onlyWhenAttacking.isEnabled() && !mc.gameSettings.keyBindAttack.isKeyDown()) return false;
         if (mc.currentScreen != null) return false;
         if (mc.player.isDead || mc.player.capabilities.isCreativeMode) return false;
-        if (System.currentTimeMillis() - lastAimTime < 50) return false;
-        return true;
+        return System.currentTimeMillis() - lastAimTime >= MIN_AIM_INTERVAL;
     }
 
     private Entity findBestTarget() {
@@ -88,6 +99,7 @@ public class AimAssist extends Module {
 
         for (Entity entity : mc.world.loadedEntityList) {
             if (!isValidTarget(entity)) continue;
+            
             double score = calculateTargetScore(entity, range, maxFov);
             if (score < bestScore) {
                 bestScore = score;
@@ -102,8 +114,13 @@ public class AimAssist extends Module {
     private boolean isValidTarget(Entity entity) {
         if (entity == mc.player || !(entity instanceof EntityLivingBase)) return false;
         if (!Target.isTarget(entity) || !entity.isEntityAlive()) return false;
-        if (mc.player.getDistance(entity) > rangeValue.getValue().doubleValue()) return false;
+        
+        double distance = mc.player.getDistance(entity);
+        double range = rangeValue.getValue().doubleValue();
+        if (distance > range) return false;
+        
         if (checkVisible.isEnabled() && !mc.player.canEntityBeSeen(entity)) return false;
+        
         return RotationUtil.getRotationDifference(entity) <= fovValue.getValue().doubleValue();
     }
 
@@ -111,74 +128,182 @@ public class AimAssist extends Module {
         double distance = mc.player.getDistance(entity);
         double rotationDiff = RotationUtil.getRotationDifference(entity);
         double score = (distance / range) * 0.6 + (rotationDiff / maxFov) * 0.4;
-        if (useNeuralNetwork.isEnabled() && targetPatterns.containsKey(entity)) {
-            TargetPattern pattern = targetPatterns.get(entity);
-            score *= pattern.getPredictionConfidence();
+        
+        if (useNeuralNetwork.isEnabled()) {
+            TargetPattern pattern = targetPatterns.get(entity.getEntityId());
+            if (pattern != null) {
+                score *= pattern.getPredictionConfidence();
+            }
         }
         return score;
     }
 
     private Rotation calculateTargetRotation(Entity target) {
         Rotation baseRotation = RotationUtil.toRotation(RotationUtil.getCenter(target.getEntityBoundingBox()), 1.0F);
+        
         if (useNeuralNetwork.isEnabled()) {
             baseRotation = applyNeuralPrediction(baseRotation, target);
         }
-        return RotationUtil.limitAngleChange(RotationUtil.getPlayerRotation(), applyHumanizationNoise(baseRotation), (float) speedValue.getValue().doubleValue());
+        
+        Rotation humanizedRotation = applyHumanizationNoise(baseRotation);
+        return RotationUtil.limitAngleChange(
+            RotationUtil.getPlayerRotation(), 
+            humanizedRotation, 
+            (float) speedValue.getValue().doubleValue()
+        );
     }
 
     private Rotation applyNeuralPrediction(Rotation rotation, Entity target) {
-        if (!targetPatterns.containsKey(target)) return rotation;
-        TargetPattern pattern = targetPatterns.get(target);
+        TargetPattern pattern = targetPatterns.get(target.getEntityId());
+        if (pattern == null) return rotation;
+        
         float[] prediction = pattern.predictNextPosition();
         float confidence = pattern.getPredictionConfidence();
         float predictedYaw = rotation.yaw + prediction[0] * confidence;
-        float predictedPitch = MathHelper.clamp(rotation.pitch + prediction[1] * confidence, -90, 90);
+        float predictedPitch = MathHelper.clamp(rotation.pitch + prediction[1] * confidence, MIN_PITCH, MAX_PITCH);
+        
         return new Rotation(predictedYaw, predictedPitch);
     }
 
     private Rotation applyHumanizationNoise(Rotation rotation) {
         long currentTime = System.currentTimeMillis();
         if (lastUpdateTime == 0) lastUpdateTime = currentTime;
+        
         double deltaTime = (currentTime - lastUpdateTime) / 1000.0;
         lastUpdateTime = currentTime;
         timeCounter += deltaTime;
 
         double amplitude = noise1Value.getValue().doubleValue();
         double frequency = noise2Value.getValue().doubleValue();
+        double randomness = noise3Value.getValue().doubleValue();
+        double smoothing = noise4Value.getValue().doubleValue();
+        double offset = noise5Value.getValue().doubleValue();
         double smoothness = MathHelper.clamp(smoothnessValue.getValue().doubleValue(), 0.1, 1.0);
 
-        double yawNoise = generateImprovedNoise(timeCounter * frequency, 0) * amplitude;
-        double pitchNoise = generateImprovedNoise(0, timeCounter * frequency) * amplitude * 0.5;
-        yawNoise *= smoothness;
-        pitchNoise *= smoothness;
+        double timeWithOffset = timeCounter + offset;
+        double yawNoise = generateAdvancedNoise(timeWithOffset * frequency + noiseOffsetX, noiseOffsetY, randomness, smoothing) * amplitude * smoothness;
+        double pitchNoise = generateAdvancedNoise(noiseOffsetX, timeWithOffset * frequency + noiseOffsetY, randomness, smoothing) * amplitude * 0.5 * smoothness;
+
+        yawNoise = MathHelper.clamp(yawNoise, -8.0, 8.0);
+        pitchNoise = MathHelper.clamp(pitchNoise, -4.0, 4.0);
 
         float newYaw = (float) (rotation.yaw + yawNoise);
-        float newPitch = (float) MathHelper.clamp(rotation.pitch + pitchNoise, -90, 90);
-        return new Rotation(newYaw, newPitch);
+        float newPitch = (float) (rotation.pitch + pitchNoise);
+        
+        return normalizeRotation(new Rotation(newYaw, newPitch));
+    }
+
+    private double generateAdvancedNoise(double x, double y, double randomness, double smoothing) {
+        double baseNoise = generateImprovedNoise(x, y);
+        double randomComponent = (random.nextDouble() - 0.5) * 2.0 * randomness;
+        double combined = (baseNoise * (1.0 - randomness)) + (randomComponent * randomness);
+        
+        double smoothed = smoothNoise(combined, smoothing);
+        return MathHelper.clamp(smoothed, -1.0, 1.0);
+    }
+
+    private double smoothNoise(double value, double smoothing) {
+        if (smoothing <= 0.1) return value;
+        double factor = 1.0 / smoothing;
+        return Math.tanh(value * factor) / Math.tanh(factor);
+    }
+
+    private boolean applyValidRotation(Rotation rotation) {
+        if (!isValidRotation(rotation)) {
+            return false;
+        }
+
+        Rotation currentRotation = RotationUtil.getPlayerRotation();
+        Rotation smoothedRotation = smoothRotationTransition(currentRotation, rotation);
+        
+        if (!isValidRotation(smoothedRotation)) {
+            smoothedRotation = normalizeRotation(smoothedRotation);
+        }
+        
+        if (isValidRotation(smoothedRotation)) {
+            smoothedRotation.apply();
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isValidRotation(Rotation rotation) {
+        if (rotation == null) return false;
+        
+        float yaw = rotation.yaw;
+        float pitch = rotation.pitch;
+        
+        if (Float.isNaN(yaw) || Float.isInfinite(yaw) || Float.isNaN(pitch) || Float.isInfinite(pitch)) {
+            return false;
+        }
+        
+        if (pitch < MIN_PITCH || pitch > MAX_PITCH) {
+            return false;
+        }
+        
+        return true;
+    }
+
+    private Rotation normalizeRotation(Rotation rotation) {
+        float yaw = MathHelper.wrapDegrees(rotation.yaw);
+        float pitch = MathHelper.clamp(rotation.pitch, MIN_PITCH, MAX_PITCH);
+        return new Rotation(yaw, pitch);
+    }
+
+    private Rotation smoothRotationTransition(Rotation from, Rotation to) {
+        float smoothness = (float) smoothnessValue.getValue().doubleValue();
+        smoothness = MathHelper.clamp(smoothness, 0.1f, 1.0f);
+        
+        float deltaYaw = MathHelper.wrapDegrees(to.yaw - from.yaw);
+        float deltaPitch = to.pitch - from.pitch;
+        
+        float smoothedYaw = from.yaw + deltaYaw * smoothness;
+        float smoothedPitch = from.pitch + deltaPitch * smoothness;
+        
+        smoothedYaw = MathHelper.wrapDegrees(smoothedYaw);
+        smoothedPitch = MathHelper.clamp(smoothedPitch, MIN_PITCH, MAX_PITCH);
+        
+        return new Rotation(smoothedYaw, smoothedPitch);
     }
 
     private Rotation applySafetyChecks(Rotation rotation) {
         if (!safetyCheck.isEnabled()) return rotation;
-        EntityPlayerSP player = mc.player;
-        if (player == null) return null;
-
-        float deltaYaw = MathHelper.wrapDegrees(rotation.yaw - lastAimAngles[0]);
-        float deltaPitch = rotation.pitch - lastAimAngles[1];
+        
+        Rotation normalizedRotation = normalizeRotation(rotation);
+        if (!isValidRotation(normalizedRotation)) {
+            return null;
+        }
+        
+        float deltaYaw = MathHelper.wrapDegrees(normalizedRotation.yaw - lastAimAngles[0]);
+        float deltaPitch = normalizedRotation.pitch - lastAimAngles[1];
         float maxChange = (float) maxAngleChange.getValue().doubleValue();
 
         if (Math.abs(deltaYaw) > maxChange || Math.abs(deltaPitch) > maxChange) {
             if (avoidSnap.isEnabled()) {
-                suspiciousBehaviorCount++;
-                if (suspiciousBehaviorCount > 3) return null;
-                float limitedYaw = lastAimAngles[0] + Math.signum(deltaYaw) * maxChange * 0.5f;
-                float limitedPitch = lastAimAngles[1] + Math.signum(deltaPitch) * maxChange * 0.5f;
-                return new Rotation(limitedYaw, limitedPitch);
+                return handleSuspiciousMovement(deltaYaw, deltaPitch, maxChange);
             }
         } else {
             suspiciousBehaviorCount = Math.max(0, suspiciousBehaviorCount - 1);
         }
 
-        return rotation;
+        return normalizedRotation;
+    }
+
+    private Rotation handleSuspiciousMovement(float deltaYaw, float deltaPitch, float maxChange) {
+        suspiciousBehaviorCount++;
+        if (suspiciousBehaviorCount > MAX_SUSPICIOUS_COUNT) return null;
+        
+        float limitedYaw = lastAimAngles[0] + Math.signum(deltaYaw) * maxChange * 0.5f;
+        float limitedPitch = lastAimAngles[1] + Math.signum(deltaPitch) * maxChange * 0.5f;
+        
+        return normalizeRotation(new Rotation(limitedYaw, limitedPitch));
+    }
+
+    private void updateSafetyTracking(Rotation rotation) {
+        lastAimTime = System.currentTimeMillis();
+        Rotation normalized = normalizeRotation(rotation);
+        lastAimAngles[0] = normalized.yaw;
+        lastAimAngles[1] = normalized.pitch;
     }
 
     private void updateTargetTracking(Entity currentTarget) {
@@ -190,21 +315,16 @@ public class AimAssist extends Module {
         }
 
         if (currentTarget != null && useNeuralNetwork.isEnabled()) {
-            targetPatterns.computeIfAbsent(currentTarget, k -> new TargetPattern()).updatePosition(currentTarget);
+            int entityId = currentTarget.getEntityId();
+            targetPatterns.computeIfAbsent(entityId, k -> new TargetPattern()).updatePosition(currentTarget);
         }
     }
 
     private void updateNeuralNetwork(Entity target) {
-        if (neuralNetwork != null && targetPatterns.containsKey(target)) {
-            TargetPattern pattern = targetPatterns.get(target);
+        TargetPattern pattern = targetPatterns.get(target.getEntityId());
+        if (pattern != null && neuralNetwork != null) {
             neuralNetwork.learnFromPattern(pattern, learningRate.getValue().floatValue());
         }
-    }
-
-    private void updateSafetyTracking(Rotation rotation) {
-        lastAimTime = System.currentTimeMillis();
-        lastAimAngles[0] = rotation.yaw;
-        lastAimAngles[1] = rotation.pitch;
     }
 
     private void resetTracking() {
@@ -236,15 +356,10 @@ public class AimAssist extends Module {
         double u = fade(x);
         double v = fade(y);
         int A = p[X] + Y;
-        int AA = p[A];
-        int AB = p[A + 1];
         int B = p[X + 1] + Y;
-        int BA = p[B];
-        int BB = p[B + 1];
-        return lerp(v, lerp(u, grad(p[AA], x, y, 0),
-                grad(p[BA], x - 1, y, 0)),
-                lerp(u, grad(p[AB], x, y - 1, 0),
-                        grad(p[BB], x - 1, y - 1, 0)));
+        
+        return lerp(v, lerp(u, grad(p[p[A]], x, y, 0), grad(p[p[B]], x - 1, y, 0)),
+                lerp(u, grad(p[p[A + 1]], x, y - 1, 0), grad(p[p[B + 1]], x - 1, y - 1, 0)));
     }
 
     private double fade(double t) {
@@ -280,13 +395,12 @@ public class AimAssist extends Module {
     };
 
     static {
-        for (int i = 0; i < 256; i++) {
-            p[256 + i] = p[i] = permutation[i];
-        }
+        System.arraycopy(permutation, 0, p, 0, 256);
+        System.arraycopy(permutation, 0, p, 256, 256);
     }
 
     private class SimpleAimNeuralNetwork {
-        private float[] weights = new float[6];
+        private final float[] weights = new float[6];
 
         public SimpleAimNeuralNetwork() {
             for (int i = 0; i < weights.length; i++) {
@@ -296,10 +410,16 @@ public class AimAssist extends Module {
 
         public void learnFromPattern(TargetPattern pattern, float learningRate) {
             if (pattern.getHistorySize() < 2) return;
-            float[] lastPos = pattern.getPositionHistory().get(pattern.getHistorySize() - 2);
-            float[] currentPos = pattern.getPositionHistory().get(pattern.getHistorySize() - 1);
+            
+            List<float[]> history = pattern.getPositionHistory();
+            float[] lastPos = history.get(history.size() - 2);
+            float[] currentPos = history.get(history.size() - 1);
             float[] predicted = predict(lastPos[0], lastPos[1], lastPos[2]);
-            float[] actual = {currentPos[0] - lastPos[0], currentPos[1] - lastPos[1], currentPos[2] - lastPos[2]};
+            float[] actual = {
+                currentPos[0] - lastPos[0], 
+                currentPos[1] - lastPos[1], 
+                currentPos[2] - lastPos[2]
+            };
 
             for (int i = 0; i < 3; i++) {
                 float error = actual[i] - predicted[i];
@@ -318,9 +438,8 @@ public class AimAssist extends Module {
     }
 
     private class TargetPattern {
-        private List<float[]> positionHistory = new ArrayList<>();
+        private final List<float[]> positionHistory = new ArrayList<>();
         private long lastUpdateTime = 0;
-        private static final int MAX_HISTORY = 20;
 
         public void updatePosition(Entity target) {
             float[] currentPos = {
@@ -329,12 +448,15 @@ public class AimAssist extends Module {
                 (float) target.posZ
             };
             positionHistory.add(currentPos);
-            if (positionHistory.size() > MAX_HISTORY) positionHistory.remove(0);
+            if (positionHistory.size() > MAX_HISTORY_SIZE) {
+                positionHistory.remove(0);
+            }
             lastUpdateTime = System.currentTimeMillis();
         }
 
         public float[] predictNextPosition() {
             if (positionHistory.size() < 2) return new float[]{0, 0, 0};
+            
             float[] lastPos = positionHistory.get(positionHistory.size() - 1);
             float[] prediction = neuralNetwork.predict(lastPos[0], lastPos[1], lastPos[2]);
             return new float[]{prediction[0], prediction[1], 0};
@@ -342,20 +464,24 @@ public class AimAssist extends Module {
 
         public float getPredictionConfidence() {
             if (positionHistory.size() < 5) return 0.1f;
+            
             float consistency = calculateMovementConsistency();
             return Math.min(consistency * adaptationSpeed.getValue().floatValue(), 1.0f);
         }
 
         private float calculateMovementConsistency() {
             if (positionHistory.size() < 3) return 0f;
+            
             float totalChange = 0f;
             int samples = 0;
+            
             for (int i = 1; i < positionHistory.size(); i++) {
                 float[] prev = positionHistory.get(i - 1);
                 float[] curr = positionHistory.get(i);
                 totalChange += Math.abs(curr[0] - prev[0]) + Math.abs(curr[1] - prev[1]);
                 samples += 2;
             }
+            
             float avgChange = totalChange / samples;
             return 1.0f / (1.0f + avgChange);
         }
